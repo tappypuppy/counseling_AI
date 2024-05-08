@@ -7,9 +7,21 @@ from langchain.memory import ChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
 
 import sys
+from datetime import datetime, timedelta
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from init_db import ChatLog
 
 load_dotenv()
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+
+user = 'root'
+password = 'root'
+host = 'db'
+db_name = 'demo'
+
+input = '次の文章を日本語に翻訳してください。: Hello World.'
+user_name = 'test_user'
 
 
 
@@ -31,24 +43,51 @@ chain = prompt | chat
 
 ephemeral_chat_history = ChatMessageHistory()
 
-input1 = "Translate this sentence from English to French: I love programming."
-ephemeral_chat_history.add_user_message(input1)
+
+
+# engineの設定
+# Create the engine and session
+engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}/{db_name}', echo=True)
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Get the current time and calculate the past 24 hours
+now = datetime.now()
+past_24_hours = now - timedelta(hours=24)
+
+# Query the ChatLog table with the specified conditions
+results = session.query(ChatLog).filter(
+    ChatLog.user_id == user_name,
+    ChatLog.created_at >= past_24_hours
+).order_by(ChatLog.created_at).all()
+
+# Print the results
+for result in results:
+    print(result.human_message, result.ai_message)
+
+
+for result in results:
+    ephemeral_chat_history.add_user_message(result.human_message)
+    ephemeral_chat_history.add_ai_message(result.ai_message)
+
+ephemeral_chat_history.add_user_message(input)
 
 response = chain.invoke(
     {
         "messeges": ephemeral_chat_history.messages,
     }
+
 )
 
-ephemeral_chat_history.add_ai_message(response)
+print(response.content)
 
-input2 = "What did I just ask you?"
+generated_message = response.content
 
-ephemeral_chat_history.add_user_message(input2)
+# 新しいメッセージを追加
+new_message = ChatLog(user_id = user_name, human_message=input, ai_message=generated_message)
+session.add(new_message)
 
-chain.invoke(
-    {
-        "messeges": ephemeral_chat_history.messages,
-    }
-)
+# 変更をコミット
+session.commit()
+
 
