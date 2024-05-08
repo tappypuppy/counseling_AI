@@ -8,9 +8,8 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 
 import sys
 from datetime import datetime, timedelta
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from init_db import ChatLog
+from settings import db_session
 
 load_dotenv()
 
@@ -45,11 +44,9 @@ ephemeral_chat_history = ChatMessageHistory()
 
 
 
-# engineの設定
-# Create the engine and session
-engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}/{db_name}', echo=True)
-Session = sessionmaker(bind=engine)
-session = Session()
+# Create the session
+
+session = db_session()
 
 # Get the current time and calculate the past 24 hours
 now = datetime.now()

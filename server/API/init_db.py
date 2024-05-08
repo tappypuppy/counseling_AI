@@ -3,32 +3,13 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Float, String, Boolean,Text, DateTime
 from sqlalchemy.sql import func
+from settings import db_session,Base,Engine
 
 # import pandas as pd
 import os
 
-user = 'root'
-password = 'root'
-host = 'db'
-db_name = 'demo'
 
-# engineの設定
-engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}/{db_name}', echo=True)
 
-# セッションの作成
-db_session = scoped_session(
-  sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-  )
-)
-
-# テーブルを作成する
-Base = declarative_base()
-Base.query  = db_session.query_property()
-
-print('ok')
 
 # テーブルを定義する
 # Baseを継承
@@ -49,7 +30,7 @@ class ChatLog(Base):
 
 
 
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=Engine)
 
 print('create table ok')
 
