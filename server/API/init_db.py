@@ -32,7 +32,7 @@ print('ok')
 
 # テーブルを定義する
 # Baseを継承
-class chat_log(Base):
+class ChatLog(Base):
     __tablename__ = 'chat_log'
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String(255))

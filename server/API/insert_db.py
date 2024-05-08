@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from init_db import chat_log
+from init_db import ChatLog
 user = 'root'
 password = 'root'
 host = 'db'
@@ -15,8 +15,8 @@ engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}/{db_nam
 session = Session(bind=engine)
 
 # テストデータを作成
-test_data = chat_log(user_id="test_user", human_message="Hello, AI!", ai_message="Hello, human!")
-test_data2 = chat_log(user_id="test_user", human_message="こんにちは", ai_message="こんにちは、どうしたのですか?")
+test_data = ChatLog(user_id="test_user", human_message="Hello, AI!", ai_message="Hello, human!")
+test_data2 = ChatLog(user_id="test_user", human_message="こんにちは", ai_message="こんにちは、どうしたのですか?")
 
 # テストデータをセッションに追加
 session.add(test_data)
