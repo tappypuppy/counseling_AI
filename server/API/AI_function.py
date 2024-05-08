@@ -77,14 +77,16 @@ def AI_output(user_id,input):
 
     # 変更をコミット
     session.commit()
+    
+    return generated_message
 
 
 
-input = '次の文章を日本語に翻訳してください。: I love you.'
-user_name = 'test_user'
+# input = '次の文章を日本語に翻訳してください。: I love you.'
+# user_name = 'test_user'
 
 
-AI_output(user_name,input)
+# AI_output(user_name,input)
 
 
 
