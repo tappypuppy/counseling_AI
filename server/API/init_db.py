@@ -30,11 +30,13 @@ class ChatLog(Base):
 
 
 
-Base.metadata.create_all(bind=Engine)
-
-print('create table ok')
-
+if __name__ == "__main__":
+    Base.metadata.create_all(bind=Engine)
 
 
-db_session.commit()
-db_session.close()
+    print('create table ok')
+
+
+
+    db_session.commit()
+    db_session.close()
