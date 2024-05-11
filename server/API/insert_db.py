@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from init_db import ChatLog
+from ChatLog import ChatLog
 user = 'root'
 password = 'root'
 host = 'db'

@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.memory import ChatMessageHistory
 
 from datetime import datetime, timedelta
-from init_db import ChatLog
+from ChatLog import ChatLog
 from settings import db_session
 from prompt import system_prompt
 
@@ -32,7 +32,7 @@ def get_chat_history(user_id):
 
 def AI_output(user_id,input):
     load_dotenv()
-    chat = ChatOpenAI(model="gpt-3.5-turbo-1106")
+    chat = ChatOpenAI(model="gpt-4-turbo-2024-04-09")
 
     prompt = ChatPromptTemplate.from_messages(
         [
