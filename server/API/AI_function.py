@@ -36,11 +36,12 @@ def AI_output(user_id,input):
 
     prompt = ChatPromptTemplate.from_messages(
         [
+            
+            MessagesPlaceholder(variable_name="messeges"),
             (
                 "system",
                 system_prompt,
             ),
-            MessagesPlaceholder(variable_name="messeges"),
         ]
     )
 
