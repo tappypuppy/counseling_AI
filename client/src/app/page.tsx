@@ -1,19 +1,17 @@
-import React from 'react'
-import ChatClient from './components/ChatClient';
+'use client';
+import ChatPage from "@/components/ChatUI/ChatPage/ChatPage";
+import Form from "@/components/ChatUI/form";
+import Image from "next/image";
 
-async function ChatPage() {
+
+
+export default function Home() {
+
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* <!-- チャットヘッダー --> */}
-      <div className="p-3 bg-gray-800 text-white">
-        <h1 className="text-lg">チャットルーム</h1>
-      </div>
-      
-      <ChatClient />
-      
-    </div>
-  )
+    <main>
+      <ChatPage />
+      {/* <Form /> */}
+    </main>
+  );
 }
-
-export default ChatPage
