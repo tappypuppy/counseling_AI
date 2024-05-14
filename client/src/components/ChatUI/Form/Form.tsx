@@ -9,14 +9,18 @@ function Form() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const input = formData.get("input");
 
     const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
-    const newUserMessage = {
-      id: newId,
-      context: formData.get("input"),
-      sender: "user",
-    };
-    const updateMessage = [...chatLog, newUserMessage];
+    if (typeof input === "string" && input !== null) {
+      const newUserMessage = {
+        id: newId,
+        context: input,
+        sender: "user",
+      };
+      const updateMessage = [...chatLog, newUserMessage];
+      setChatLog([...chatLog, newUserMessage]);
+    }
 
     const res = await fetch(`/api`, {
       method: "POST",
@@ -40,7 +44,7 @@ function Form() {
       context: msg_json.data.output,
       sender: "gpt",
     };
-    setChatLog([...updateMessage, newGPTMessage]);
+    setChatLog((prevChatLog) => [...prevChatLog, newGPTMessage]);
   }
   return (
     <div>
