@@ -1,4 +1,5 @@
 import ChatMessage from '../ChatMessage/ChatMessage';
+import Form from '../Form/Form';
 import Top from '../Top/Top';
 import styles from './ChatPage.module.css';
 
@@ -7,6 +8,7 @@ function ChatPage() {
         <div className={styles.inner}>
             <Top />
             <ChatMessage />
+            <Form />
         </div>
     );
 }

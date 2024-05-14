@@ -1,17 +1,13 @@
-'use client';
+"use client";
 import ChatPage from "@/components/ChatUI/ChatPage/ChatPage";
-import Form from "@/components/ChatUI/form";
-import Image from "next/image";
-
-
+import { RecoilRoot } from "recoil";
 
 export default function Home() {
-
-
   return (
     <main>
-      <ChatPage />
-      {/* <Form /> */}
+      <RecoilRoot>
+        <ChatPage />
+      </RecoilRoot>
     </main>
   );
 }
