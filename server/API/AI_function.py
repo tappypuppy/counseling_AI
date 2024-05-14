@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.memory import ChatMessageHistory
-
+import openai
 from datetime import datetime, timedelta
 from ChatLog import ChatLog
 from settings import db_session
@@ -86,7 +86,15 @@ def AI_output(user_id,input):
 
 
 
-
+def speech_to_text(file_path):
+    load_dotenv()
+    client  = openai.OpenAI()
+    with open(file_path, "rb") as file:
+        transcript = client.audio.transcriptions.create(
+            model="whisper-1",
+            file=file,
+            language="ja",) 
+    return transcript.text
 
 
 

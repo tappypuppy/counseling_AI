@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from AI_function import AI_output
+from AI_function import AI_output, speech_to_text
 
 from fastapi import FastAPI,UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 import os
+# import openai
+# from dotenv import load_dotenv
+
 
 
 app = FastAPI()
@@ -30,8 +33,6 @@ class Item(BaseModel):
     user_id: str
     input_text: str
 
-class Audio(BaseModel):
-    audio: bytes
 
 @app.post("/input/")
 def process_item(item: Item):
@@ -44,10 +45,23 @@ def process_item(item: Item):
 @app.post("/audio_input/")
 async def upload_audio(audio: UploadFile = File(...)):
     contents = await audio.read()
+    filename = 'test.wav'
     # Save the audio file
-    print(type(contents))
-    file_path = os.path.join("./src", 'test.wav')
+    file_path = os.path.join("./src", filename)
     with open(file_path, "wb") as file:
         file.write(contents)
+    
+    # client  = openai.OpenAI()
+    # with open(file_path, "rb") as file:
+    #     transcript = client.audio.transcriptions.create(
+    #         model="whisper-1",
+    #         file=file,
+    #         language="ja",)   
 
-    return JSONResponse(content={"filename": audio.filename})
+    # print(transcript.text)
+
+    text = speech_to_text(file_path)
+    output = AI_output("test", text)
+    print(text)
+
+    return {"result": "Success", "output": output}
