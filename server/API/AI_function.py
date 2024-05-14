@@ -32,16 +32,17 @@ def get_chat_history(user_id):
 
 def AI_output(user_id,input):
     load_dotenv()
-    chat = ChatOpenAI(model="gpt-4-turbo-2024-04-09")
+    # chat = ChatOpenAI(model="gpt-4-turbo-2024-04-09")
+    chat = ChatOpenAI(model="gpt-3.5-turbo")
 
     prompt = ChatPromptTemplate.from_messages(
         [
-            
-            MessagesPlaceholder(variable_name="messeges"),
             (
                 "system",
                 system_prompt,
             ),
+            MessagesPlaceholder(variable_name="messeges"),
+            
         ]
     )
 
@@ -83,11 +84,7 @@ def AI_output(user_id,input):
 
 
 
-# input = '次の文章を日本語に翻訳してください。: I love you.'
-# user_name = 'test_user'
 
-
-# AI_output(user_name,input)
 
 
 

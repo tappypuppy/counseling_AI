@@ -9,12 +9,12 @@ interface MessageType {
 
 export default function ChatMessage() {
   const [chatLog, setChatLog] = useState<MessageType[]>([
-    {
-      id: 0,
-      context:
-        "こんにちは!カウンセラーのcocoroです。悩み事と、その時の気持ちについてお聞かせください。私はあなたの味方です。",
-      sender: "gpt",
-    },
+    // {
+    //   id: 0,
+    //   context:
+    //     "こんにちは!カウンセラーのcocoroです。悩み事と、その時の気持ちについてお聞かせください。私はあなたの味方です。",
+    //   sender: "gpt",
+    // },
   ]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -35,7 +35,9 @@ export default function ChatMessage() {
         "Content-Type": "application/json;charset=UTF-8",
       },
       body: JSON.stringify({
-        userId: "kazuki_20240512_3",
+        // "kazuki_20240513_gpt3.5_compare_job_1"
+        // "kazuki_20240514_gpt4_compare_job_1"
+        userId: "kazuki_20240514_gpt4_compare_job_1",
         prompt: formData.get("input"),
       }),
     });
