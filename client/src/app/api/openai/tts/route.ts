@@ -2,7 +2,7 @@
 import { textToSpeech } from "./text_to_speech";
 
 export async function POST(req: Request) {
-    console.log("POST /api/openai/tts");
+  console.log("POST /api/openai/tts");
   const { textPrompt } = await req.json();
 
   if (typeof textPrompt !== "string") {
