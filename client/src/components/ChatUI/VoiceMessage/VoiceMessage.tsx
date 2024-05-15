@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { chatLogState } from "@/state/chatLogState";
+import { useRecoilState, useResetRecoilState } from "recoil";
 
 const Recorder: React.FC = () => {
   const [recording, setRecording] = useState<boolean>(false);
@@ -6,6 +8,7 @@ const Recorder: React.FC = () => {
     null
   );
   const [audioUrl, setAudioUrl] = useState<string>("");
+  const [chatLog, setChatLog] = useRecoilState(chatLogState);
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -32,7 +35,22 @@ const Recorder: React.FC = () => {
         });
         const data = await response.json();
         console.log("Audio saved:", data.output);
+
+        // add the response to the chat log
         const output_text = data.output;
+        const newId =
+          chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
+        if (typeof output_text === "string" && output_text !== null) {
+          const newUserMessage = {
+            id: newId,
+            context: output_text,
+            sender: "gpt",
+          };
+          const updateMessage = [...chatLog, newUserMessage];
+          setChatLog([...chatLog, newUserMessage]);
+        }
+     
+
         const tts_response = await fetch("/api/openai/tts", {
           method: "POST",
           headers: {
