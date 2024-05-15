@@ -18,7 +18,6 @@ function Form() {
         context: input,
         sender: "user",
       };
-      const updateMessage = [...chatLog, newUserMessage];
       setChatLog([...chatLog, newUserMessage]);
     }
 
