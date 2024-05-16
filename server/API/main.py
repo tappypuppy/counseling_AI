@@ -30,14 +30,17 @@ def read_root():
     return {"Hello": "World"}
 
 class Item(BaseModel):
-    user_id: str
-    input_text: str
+    user_name: str
+    room_name: str
+    message: str
+    is_audio: bool
+    audio_file: str
 
 
 @app.post("/input/")
 def process_item(item: Item):
     print(item)
-    output = AI_output(item.user_id, item.input_text)
+    output = AI_output(user_name=item.user_name, room_name=item.room_name ,message=item.message, is_audio=item.is_audio, audio_file=item.audio_file)
     # Process the input_text here
     return {"result": "Success", "output": output}
 

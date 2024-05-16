@@ -40,13 +40,15 @@ class User(Base):
 class Room(Base):
     __tablename__ = 'room'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    room_name = Column(String(255), nullable=False)
     user_id = Column(ForeignKey('user.id'), nullable=False)
     created_at = Column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
     message = relationship('Message', backref='room')
 
-    def __init__(self, user_id=None):
+    def __init__(self, room_name=None ,user_id=None):
+        self.room_name = room_name
         self.user_id = user_id
 
 class Message(Base):
@@ -61,7 +63,8 @@ class Message(Base):
     )
     audio = relationship('Audio', backref='message')
 
-    def __init__(self, room_id=None, message=None, sender=None):
+    def __init__(self, user_id=None, room_id=None, message=None, sender=None):
+        self.user_id = user_id
         self.room_id = room_id
         self.message = message
         self.sender = sender
