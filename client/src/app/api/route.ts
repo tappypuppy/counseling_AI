@@ -5,9 +5,16 @@ import { sendPromptToGpt } from "./service";
 
 export async function POST(request: NextRequest) {
   console.log("Request received");
-  const { prompt, userId } = await request.json();
+  const { userName, roomName, message, isAudio, audioFile } =
+    await request.json();
 
-  const gptResponseMessage = await sendPromptToGpt(prompt, userId);
+  const gptResponseMessage = await sendPromptToGpt(
+    userName,
+    roomName,
+    message,
+    isAudio,
+    audioFile
+  );
 
   const gptResponseMessageJson = await gptResponseMessage.json();
   console.log("gptResponseMessage:", gptResponseMessageJson);
@@ -16,6 +23,6 @@ export async function POST(request: NextRequest) {
     data: gptResponseMessageJson,
   });
   console.log("Response sent");
-  
+
   return response;
 }
