@@ -60,7 +60,7 @@ const Recorder: React.FC = () => {
               "Content-Type": "application/json;charset=UTF-8",
             },
             body: JSON.stringify({
-              userId: "kazuki_20240514_gpt3.5_test",
+              userId: "kazuki_20240515_gpt3.5_test_1",
               prompt: output_text,
             }),
           });

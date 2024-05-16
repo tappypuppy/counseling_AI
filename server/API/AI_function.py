@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.memory import ChatMessageHistory
 import openai
 from datetime import datetime, timedelta
-from ChatLog import ChatLog
+from tables import ChatLog
 from settings import db_session
 from prompt import system_prompt
 
