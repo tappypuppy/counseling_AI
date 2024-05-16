@@ -61,7 +61,10 @@ const Recorder: React.FC = () => {
             },
             body: JSON.stringify({
               userId: "kazuki_20240515_gpt3.5_test_1",
-              prompt: output_text,
+              roomId: "room1",
+              message: output_text,
+              isAudio: true,
+              audioFile: "",
             }),
           });
 
