@@ -4,7 +4,6 @@ from AI_function import AI_output, speech_to_text
 
 from fastapi import FastAPI,UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import JSONResponse
 import os
 # import openai
 # from dotenv import load_dotenv

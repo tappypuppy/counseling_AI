@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.memory import ChatMessageHistory
 import openai
 from datetime import datetime, timedelta
-from tables import ChatLog, User, Room, Message, Audio
+from tables import User, Room, Message, Audio
 from settings import db_session
 from prompt import system_prompt
 
@@ -76,19 +76,19 @@ def AI_output(user_name,room_name, message, is_audio, audio_file):
     
     session.close()
     
-
+    # Get the chat history
     chat_histories = get_chat_history(user_id, room_id)
 
+    # Add the chat history to the ephemeral_chat_history
     for past_chat in chat_histories:
         if past_chat.sender == "AI":
             ephemeral_chat_history.add_ai_message(past_chat.message)
         else:
             ephemeral_chat_history.add_user_message(past_chat.message)
-        # ephemeral_chat_history.add_user_message(past_chat.human_message)
-        # ephemeral_chat_history.add_ai_message(past_chat.ai_message)
 
     ephemeral_chat_history.add_user_message(message)
 
+    # Invoke the chain
     response = chain.invoke(
         {
             "messeges": ephemeral_chat_history.messages,
@@ -104,7 +104,6 @@ def AI_output(user_name,room_name, message, is_audio, audio_file):
     session = db_session()
     new_user_message = Message(user_id = user_id, room_id = room_id, message=message, sender="user")
     new_ai_message = Message(user_id = user_id, room_id = room_id, message=generated_message, sender="AI")
-    # new_message = ChatLog(user_id = user_id, human_message=input, ai_message=generated_message)
     session.add(new_user_message)
     session.add(new_ai_message)
 
