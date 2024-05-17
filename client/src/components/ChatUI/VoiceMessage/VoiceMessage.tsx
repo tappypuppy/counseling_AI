@@ -54,14 +54,15 @@ const Recorder: React.FC = () => {
             setChatLog([...chatLog, newUserMessage]);
           }
 
+
           const res = await fetch(`/api`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json;charset=UTF-8",
             },
             body: JSON.stringify({
-              userId: "kazuki_20240515_gpt3.5_test_1",
-              roomId: "room1",
+              userName: "kazuki_20240517_gpt4o_test_1",
+              roomName: "room1",
               message: output_text,
               isAudio: true,
               audioFile: "",

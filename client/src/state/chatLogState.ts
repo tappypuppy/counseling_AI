@@ -12,6 +12,6 @@ interface Message {
 export const chatLogState = atom<Message[]>({
   key: 'chatLogState',
   default: [
-    { id: 1, context: "こんにちは！", sender: "gpt" },
+    // { id: 1, context: "こんにちは！", sender: "gpt" },
   ],
 });
