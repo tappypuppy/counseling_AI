@@ -61,7 +61,7 @@ const Recorder: React.FC = () => {
               "Content-Type": "application/json;charset=UTF-8",
             },
             body: JSON.stringify({
-              userName: "kazuki_20240517_gpt4o_test_1",
+              userName: "kazuki_20240517_gpt4o_test_3",
               roomName: "room1",
               message: output_text,
               isAudio: true,

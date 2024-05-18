@@ -33,8 +33,10 @@ def get_chat_history(user_id, room_id):
 
 def AI_output(user_name,room_name, message, is_audio, audio_file):
     load_dotenv()
+    # model = "gpt-4o"
     # chat = ChatOpenAI(model="gpt-4-turbo-2024-04-09")
-    chat = ChatOpenAI(model="gpt-3.5-turbo")
+    # chat = ChatOpenAI(model="gpt-3.5-turbo")
+    chat = ChatOpenAI(model="gpt-4o-2024-05-13")
 
     prompt = ChatPromptTemplate.from_messages(
         [
