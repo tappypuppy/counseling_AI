@@ -9,7 +9,7 @@ function ChatPage() {
         <div className={styles.inner}>
             <Top />
             <ChatMessage />
-            <Form />
+            <Form  room_id={1}/>
             <Recorder />
         </div>
     );
