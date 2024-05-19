@@ -5,8 +5,6 @@ from AI_function import AI_output, speech_to_text
 from fastapi import FastAPI,UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import os
-# import openai
-# from dotenv import load_dotenv
 
 
 
@@ -29,8 +27,8 @@ def read_root():
     return {"Hello": "World"}
 
 class Item(BaseModel):
-    user_name: str
-    room_name: str
+    user_email: str
+    room_id: int
     message: str
     is_audio: bool
     audio_file: str
@@ -39,7 +37,7 @@ class Item(BaseModel):
 @app.post("/input/")
 def process_item(item: Item):
     print(item)
-    output = AI_output(user_name=item.user_name, room_name=item.room_name ,message=item.message, is_audio=item.is_audio, audio_file=item.audio_file)
+    output = AI_output(user_email=item.user_email, room_id=item.room_id ,message=item.message, is_audio=item.is_audio, audio_file=item.audio_file)
     # Process the input_text here
     return {"result": "Success", "output": output}
 

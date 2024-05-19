@@ -3,37 +3,37 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.memory import ChatMessageHistory
 import openai
-from datetime import datetime, timedelta
-from tables import User, Room, Message, Audio
-from settings import db_session
 from prompt import system_prompt
 
-def get_chat_history(user_id, room_id):
+from dotenv import load_dotenv
+import os
+from supabase import create_client, Client
+from supabase.lib.client_options import ClientOptions
+
+def get_chat_history(user_id:str, room_id:int):
+    # load environment variables
+    load_dotenv()
+    url: str = os.environ.get("SUPABASE_URL")
+    key: str = os.environ.get("SUPABASE_KEY")
+
     # Create the session
-    session = db_session()
+    supabase: Client = create_client(url, key)
 
     # Get the current time and calculate the past 24 hours
-    now = datetime.now()
-    past_24_hours = now - timedelta(hours=24)
+    # now = datetime.now()
+    # past_24_hours = now - timedelta(hours=24)
 
-    # Query the ChatLog table with the specified conditions
-    past_chats = session.query(Message).filter(
-        Message.user_id == user_id,
-        Message.room_id == room_id,
-        Message.created_at >= past_24_hours
-    ).order_by(Message.created_at).all()
+    # Query the messages table with the specified conditions
+    past_chats = supabase.table('messages').select("message,sender").eq('user_id', user_id).eq('room_id', room_id).execute()
+    print(past_chats.data)
 
-    print(past_chats)
-
-    # Close the session
-    session.close()
-    return past_chats
+    return past_chats.data
 
 
 
-def AI_output(user_name,room_name, message, is_audio, audio_file):
+
+def AI_output(user_email:str,room_id:int, message:str, is_audio:bool, audio_file:str):
     load_dotenv()
-    # model = "gpt-4o"
     # chat = ChatOpenAI(model="gpt-4-turbo-2024-04-09")
     # chat = ChatOpenAI(model="gpt-3.5-turbo")
     chat = ChatOpenAI(model="gpt-4o-2024-05-13")
@@ -55,38 +55,25 @@ def AI_output(user_name,room_name, message, is_audio, audio_file):
     ephemeral_chat_history = ChatMessageHistory()
 
     # Create the session
-    session = db_session()
+    url: str = os.environ.get("SUPABASE_URL")
+    key: str = os.environ.get("SUPABASE_KEY")
 
-    # Query the User table to get the user_id based on the user_name
-    user = session.query(User).filter(User.user_name == user_name).first()
-    if not user:
-        new_user = User(user_name=user_name)
-        session.add(new_user)
-        session.commit()
-    user_id = session.query(User).filter(User.user_name == user_name).first().id
-    # Check if the user_id and room_id combination exists in the Room table
-    existing_room = session.query(Room).filter(Room.user_id == user_id, Room.room_name == room_name).first()
+    auth_opts = ClientOptions().replace(schema='next_auth')
+    supabase_auth: Client = create_client(url, key, auth_opts)
+    supabase: Client = create_client(url, key)
 
-    # If the combination does not exist, create a new row in the Room table
-    if not existing_room:
-        new_room = Room(user_id=user_id, room_name=room_name)
-        session.add(new_room)
-        session.commit()
-    
-    # Get the room_id based on the user_id and room_name
-    room_id = session.query(Room).filter(Room.user_id == user_id, Room.room_name == room_name).first().id
-    
-    session.close()
+    user_id_data = supabase_auth.table('users').select("id").eq('email', user_email).execute()
+    user_id = user_id_data.data[0]['id']
     
     # Get the chat history
     chat_histories = get_chat_history(user_id, room_id)
 
     # Add the chat history to the ephemeral_chat_history
     for past_chat in chat_histories:
-        if past_chat.sender == "AI":
-            ephemeral_chat_history.add_ai_message(past_chat.message)
+        if past_chat['sender'] == "AI":
+            ephemeral_chat_history.add_ai_message(past_chat['message'])
         else:
-            ephemeral_chat_history.add_user_message(past_chat.message)
+            ephemeral_chat_history.add_user_message(past_chat['message'])
 
     ephemeral_chat_history.add_user_message(message)
 
@@ -102,20 +89,10 @@ def AI_output(user_name,room_name, message, is_audio, audio_file):
 
     generated_message = response.content
 
-    # 新しいメッセージを追加
-    session = db_session()
-    new_user_message = Message(user_id = user_id, room_id = room_id, message=message, sender="user")
-    new_ai_message = Message(user_id = user_id, room_id = room_id, message=generated_message, sender="AI")
-    session.add(new_user_message)
-    session.add(new_ai_message)
-
-    # 変更をコミット
-    session.commit()
+    data, count = supabase.table('messages').insert({"user_id": user_id, "room_id": room_id, "message": message, "sender": "user"}).execute()
+    data, count = supabase.table('messages').insert({"user_id": user_id, "room_id": room_id, "message": generated_message, "sender": "AI"}).execute()
     
     return generated_message
-
-
-
 
 
 def speech_to_text(file_path):
