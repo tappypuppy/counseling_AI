@@ -5,12 +5,12 @@ import { sendPromptToGpt } from "./service";
 
 export async function POST(request: NextRequest) {
   console.log("Request received");
-  const { userName, roomName, message, isAudio, audioFile } =
+  const { userEmail, roomId, message, isAudio, audioFile } =
     await request.json();
 
   const gptResponseMessage = await sendPromptToGpt(
-    userName,
-    roomName,
+    userEmail,
+    roomId,
     message,
     isAudio,
     audioFile

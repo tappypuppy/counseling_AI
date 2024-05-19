@@ -5,7 +5,6 @@ from langchain.memory import ChatMessageHistory
 import openai
 from prompt import system_prompt
 
-from dotenv import load_dotenv
 import os
 from supabase import create_client, Client
 from supabase.lib.client_options import ClientOptions

@@ -1,6 +1,6 @@
 export const sendPromptToGpt = async (
-  userName: string,
-  roomName: string,
+  userEmail: string,
+  roomId: number,
   message: string,
   isAudio: boolean,
   audioFile: string
@@ -13,8 +13,8 @@ export const sendPromptToGpt = async (
       "Content-Type": "application/json;charset=UTF-8",
     },
     body: JSON.stringify({
-      user_name: userName,
-      room_name: roomName,
+      user_email: userEmail,
+      room_id: roomId,
       message: message,
       is_audio: isAudio,
       audio_file: audioFile,

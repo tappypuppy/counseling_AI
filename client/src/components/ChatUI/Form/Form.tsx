@@ -36,8 +36,8 @@ function Form() {
       body: JSON.stringify({
         // "kazuki_20240513_gpt3.5_compare_job_1"
         // "kazuki_20240514_gpt4_compare_job_1"
-        userName: "kazuki_20240517_gpt3.5_test",
-        roomName: "room1",
+        userEmail: session?.user?.email,
+        roomId: 1,
         message: formData.get("input"),
         isAudio: false,
         audioFile: "",
