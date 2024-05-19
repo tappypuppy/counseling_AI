@@ -1,15 +1,22 @@
 import styles from "./Form.module.css";
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { chatLogState } from "@/state/chatLogState";
 import { useRecoilState, useResetRecoilState } from "recoil";
+import { useSession } from "next-auth/react";
 
 function Form() {
   const [chatLog, setChatLog] = useRecoilState(chatLogState);
+  const { data:session, status} = useSession();
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const input = formData.get("input");
+    if (session && session.user) {
+      console.log(session.user.email);
+    }
+    
+    // console.log(session?.user?.id);
 
     const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
     if (typeof input === "string" && input !== null) {
