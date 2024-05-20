@@ -20,3 +20,15 @@ def create_room(user_email):
     room_id = data[1][0]['id']
 
     return room_id
+
+def get_messages(room_id):
+    load_dotenv()
+    # Create the session
+    url: str = os.environ.get("SUPABASE_URL")
+    key: str = os.environ.get("SUPABASE_KEY")
+
+    supabase: Client = create_client(url, key)
+
+    data, count = supabase.table('messages').select("message, sender").eq('room_id', room_id).execute()
+    print(data[1])
+    return data[1]

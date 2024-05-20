@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from AI_function import AI_output, speech_to_text
-from crud import create_room
+from crud import create_room, get_messages
 
 from fastapi import FastAPI,UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,6 +49,11 @@ def room(room: Room):
     room_id = create_room(room.user_email)
     return {'room_id': room_id}
 
+@app.get('/messages/{room_id}')
+def messages(room_id: int):
+    messages = get_messages(room_id)
+    return {'messages': messages}
+
 
 @app.post("/audio_input/")
 async def upload_audio(audio: UploadFile = File(...)):
@@ -59,14 +64,6 @@ async def upload_audio(audio: UploadFile = File(...)):
     with open(file_path, "wb") as file:
         file.write(contents)
     
-    # client  = openai.OpenAI()
-    # with open(file_path, "rb") as file:
-    #     transcript = client.audio.transcriptions.create(
-    #         model="whisper-1",
-    #         file=file,
-    #         language="ja",)   
-
-    # print(transcript.text)
 
     text = speech_to_text(file_path)
     output = AI_output("test", text)
