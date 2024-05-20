@@ -1,3 +1,4 @@
+'use client';
 import styles from "./Form.module.css";
 import { FormEvent } from "react";
 import { chatLogState } from "@/state/chatLogState";
@@ -5,12 +6,13 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+interface FormProps {
+  room_id: number;
+}
 
-
-const Form: React.FC = () => {
+const Form: React.FC<FormProps> = ({ room_id }) => {
   const [chatLog, setChatLog] = useRecoilState(chatLogState);
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -18,17 +20,7 @@ const Form: React.FC = () => {
     const input = formData.get("input");
     if (session && session.user) {
       console.log(session.user.email);
-      const res_create_room = await fetch("/api/create_room", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-        body: JSON.stringify({
-          userEmail: session.user.email,
-        }),
-      });
-      const res_json = await res_create_room.json();
-      const res_room_id = res_json.data.room_id;
+      
 
       const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
       if (typeof input === "string" && input !== null) {
@@ -49,7 +41,7 @@ const Form: React.FC = () => {
           // "kazuki_20240513_gpt3.5_compare_job_1"
           // "kazuki_20240514_gpt4_compare_job_1"
           userEmail: session?.user?.email,
-          roomId: res_room_id,
+          roomId: room_id,
           message: formData.get("input"),
           isAudio: false,
           audioFile: "",
@@ -63,11 +55,10 @@ const Form: React.FC = () => {
       const newGPTMessage = {
         id: newGPTId,
         context: msg_json.data.output,
-        sender: "gpt",
+        sender: "AI",
       };
       setChatLog((prevChatLog) => [...prevChatLog, newGPTMessage]);
 
-      router.push(`/chat/${res_room_id}`);
     }
   }
   return (

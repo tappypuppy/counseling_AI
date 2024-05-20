@@ -1,5 +1,7 @@
 // app/api/response/route.ts
 
+// todo: 変数名修正
+
 import { NextRequest, NextResponse } from "next/server";
 import { create_room } from "./service";
 
