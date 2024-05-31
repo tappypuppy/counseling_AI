@@ -14,7 +14,7 @@ export const Payment = () => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                customer_id: "cus_Q8lKDUCBhbp5aU", // ここに顧客IDを値に設定しましょう
+                customer_id: null,// "cus_Q8lKDUCBhbp5aU", // ここに顧客IDを値に設定しましょう
                 price_id: "price_1PITZBHfFYNX5yiouTo4Yy8w", // ここに商品IDを値に設定しましょう
               }),
             }).then((data) => data.json());

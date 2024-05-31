@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const origin: string = headers().get("origin") as string;
 
 
-  const customer = await stripe.customers.retrieve(customer_id);
+  // const customer = await stripe.customers.retrieve(customer_id);
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       },
     ],
     mode: "payment",
-    customer: customer.id,
+    // customer: customer.id,
     success_url: `${origin}/payment/result?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/payment`,
   });
