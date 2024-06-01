@@ -3,6 +3,10 @@ import type { Stripe } from "stripe";
 import PrintObject from "@/components/PrintObject";
 import { stripe } from "@/lib/stripe";
 
+import { headers } from "next/headers";
+
+import { auth } from '@/auth';
+
 export default async function ResultPage({
   searchParams,
 }: {
@@ -10,6 +14,9 @@ export default async function ResultPage({
 }): Promise<JSX.Element> {
   if (!searchParams.session_id)
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
+
+  const session = await auth();
+  const user_id = session?.user?.id;
 
   const checkoutSession: Stripe.Checkout.Session =
     await stripe.checkout.sessions.retrieve(searchParams.session_id, {
@@ -19,6 +26,20 @@ export default async function ResultPage({
   console.log(checkoutSession.created, checkoutSession.customer_email, checkoutSession.expires_at)
 
   const paymentIntent = checkoutSession.payment_intent as Stripe.PaymentIntent;
+
+  const origin: string = await headers().get("origin") as string;
+
+  // URLをenvに入れておく
+  const res = await fetch(`http://localhost:3000/api/set_purchase`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data : checkoutSession,
+      userId : user_id,
+    }),
+  })
 
   return (
     <>
