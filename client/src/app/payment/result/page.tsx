@@ -28,7 +28,7 @@ export default async function ResultPage({
   const paymentIntent = checkoutSession.payment_intent as Stripe.PaymentIntent;
 
   // URLをenvに入れておく
-  const res = await fetch(`http://localhost:3000/api/set_purchase`, {
+  const res = await fetch(process.env.API_URL +`/api/set_purchase`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
