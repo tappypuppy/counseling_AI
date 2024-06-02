@@ -15,6 +15,6 @@ export async function GET(
     },
   });
 
-  console.log("Response received: get_messages", await res);
+  console.log("Response received: get_messages", res);
   return res;
 }

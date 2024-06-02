@@ -13,7 +13,7 @@ export default function ChatMessage( { room_id }: ChatMessageProps) {
   const [chatLog, setChatLog] = useRecoilState(chatLogState);
 
   useEffect(() => {
-    fetch( process.env.API_URL +"/messages/" + room_id + "/", {
+    fetch("/api/messages/" + room_id + "/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json;charset=UTF-8",
