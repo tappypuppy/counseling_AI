@@ -1,5 +1,3 @@
-// app/api/response/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 // import { create_room } from "./service";
 
@@ -15,6 +13,6 @@ export async function GET(
     },
   });
 
-  console.log("Response received: get_messages", res);
-  return res;
+  // console.log("Response received: get_messages", res);
+  return NextResponse.json(await res.json());
 }
