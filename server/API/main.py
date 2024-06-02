@@ -6,13 +6,18 @@ from crud import create_room, get_messages
 from fastapi import FastAPI,UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import os
+from dotenv import load_dotenv
 
 
 
 app = FastAPI()
 
+load_dotenv()
+
+front_end_url = os.getenv('FRONT_END_URL')
+
 origins = [
-    "http://localhost:3000",  # Reactのオリジンを許可
+    front_end_url,  # Reactのオリジンを許可
 ]
 
 app.add_middleware(
@@ -70,3 +75,6 @@ async def upload_audio(audio: UploadFile = File(...)):
     print(text)
 
     return {"result": "Success", "output": output}
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
