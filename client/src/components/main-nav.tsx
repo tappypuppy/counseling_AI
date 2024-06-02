@@ -22,28 +22,20 @@ export function MainNav() {
       </CustomLink>
       <NavigationMenu>
         <NavigationMenuList>
-          {/* <NavigationMenuItem>
-            <NavigationMenuLink
-              href="/server-example"
-              className={navigationMenuTriggerStyle()}
-            >
-              Server Side
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              href="/client-example"
-              className={navigationMenuTriggerStyle()}
-            >
-              Client Side
-            </NavigationMenuLink>
-          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <NavigationMenuLink
               href="/newchat"
               className={navigationMenuTriggerStyle()}
             >
               new chat
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              href="/payment"
+              className={navigationMenuTriggerStyle()}
+            >
+              payment
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
