@@ -1,49 +1,77 @@
-'use client'
+"use client";
 import { useState } from "react";
 import { chatLogState } from "@/state/chatLogState";
 import { useRecoilState, useResetRecoilState } from "recoil";
+import { useSession } from "next-auth/react";
 
-const Recorder: React.FC = () => {
+interface RecorderProps {
+  room_id: number;
+}
+
+const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
+  // recordingの状態を管理
   const [recording, setRecording] = useState<boolean>(false);
+
+  // MediaRecorderの状態を管理
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
   );
+
+  // 録音した音声のURLを管理
   const [audioUrl, setAudioUrl] = useState<string>("");
+
+  // chatLogStateの状態を取得
   const [chatLog, setChatLog] = useRecoilState(chatLogState);
 
+  // セッション情報を取得
+  const { data: session, status } = useSession();
+
+  // 録音開始処理
   const startRecording = async () => {
+    // マイクの使用許可を取得
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    // MediaRecorderの設定
     const mediaRecorder = new MediaRecorder(stream);
     const chunks: Blob[] = [];
 
+    // 録音データの取得
     mediaRecorder.addEventListener("dataavailable", (e: BlobEvent) => {
       chunks.push(e.data);
     });
 
+    // 録音停止時の処理
     mediaRecorder.addEventListener("stop", async () => {
+      // 録音データをBlob形式に変換
       const audioBlob = new Blob(chunks, { type: "audio/mp3" });
+
+      // 録音データのURLを生成
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudioUrl(audioUrl);
-      console.log(audioUrl);
 
-      // Send the audioBlob to the server for saving
+      // 録音データをFormData形式に変換
       const formData = new FormData();
       formData.append("audio", audioBlob);
 
       try {
+        // 録音データをサーバーに送信
         const response = await fetch("/api/openai/stt", {
           method: "POST",
           body: formData,
         });
 
+        // サーバーからのレスポンス処理
         if (!response.ok) {
           console.error("Server response was not ok", response);
         } else if (
           response.headers.get("content-type")?.includes("application/json")
         ) {
+          // サーバーからのレスポンスをJSON形式に変換
           const responseData = await response.json();
           console.log("Speech-to-Text response:", responseData.output);
-          const output_text = responseData.output;
+
+          // レスポンスをchatLogに追加
+          const output_text = await responseData.output;
           const newId =
             chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
           if (typeof output_text === "string" && output_text !== null) {
@@ -55,48 +83,52 @@ const Recorder: React.FC = () => {
             setChatLog([...chatLog, newUserMessage]);
           }
 
+          // セッション情報が取得できている場合
+          if (session && session.user) {
+            // テキスト化した入力をAPIに送信
+            const res = await fetch(`/api`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json;charset=UTF-8",
+              },
+              body: JSON.stringify({
+                userEmail: session?.user?.email,
+                roomId: room_id,
+                message: output_text,
+                isAudio: true,
+                audioFile: "",
+              }),
+            });
 
-          const res = await fetch(`/api`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json;charset=UTF-8",
-            },
-            body: JSON.stringify({
-              userName: "kazuki_20240517_gpt4o_test_3",
-              roomName: "room1",
-              message: output_text,
-              isAudio: true,
-              audioFile: "",
-            }),
-          });
+            // APIからのレスポンスを取得
+            const msg_json = await res.json();
 
-          const msg_json = await res.json();
+            // chatLogに追加
+            const newGPTId = newId + 1;
+            const newGPTMessage = {
+              id: newGPTId,
+              context: msg_json.data.output,
+              sender: "AI",
+            };
+            setChatLog((prevChatLog) => [...prevChatLog, newGPTMessage]);
 
-          const newGPTId = newId + 1;
-          const newGPTMessage = {
-            id: newGPTId,
-            context: msg_json.data.output,
-            sender: "gpt",
-          };
-          setChatLog((prevChatLog) => [...prevChatLog, newGPTMessage]);
+            // テキスト化した出力を音声化
+            const tts_response = await fetch("/api/openai/tts", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json;charset=UTF-8",
+              },
+              body: JSON.stringify({
+                textPrompt: msg_json.data.output,
+              }),
+            });
 
-          const tts_response = await fetch("/api/openai/tts", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json;charset=UTF-8",
-            },
-            body: JSON.stringify({
-              textPrompt: msg_json.data.output,
-            }),
-          });
-
-          const tts_data = await tts_response.json();
-          console.log("TTS response:", tts_data.srcUrl);
-          const audio = new Audio(tts_data.srcUrl);
-          audio.play();
-
-
-
+            // 音声データを再生
+            const tts_data = await tts_response.json();
+            console.log("TTS response:", tts_data.srcUrl);
+            const audio = new Audio(tts_data.srcUrl);
+            audio.play();
+          }
         } else {
           console.error("Server response is not JSON", await response.text());
         }
@@ -105,6 +137,7 @@ const Recorder: React.FC = () => {
       }
     });
 
+    // 録音開始
     mediaRecorder.start();
     setMediaRecorder(mediaRecorder);
     setRecording(true);

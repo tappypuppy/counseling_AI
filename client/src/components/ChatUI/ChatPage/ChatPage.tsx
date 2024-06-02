@@ -13,7 +13,7 @@ function ChatPage(props: ChatPageProps) {
         <div className={styles.inner}>
             <ChatMessage room_id={props.room_id}  />
             <Form room_id={props.room_id} />
-            <Recorder />
+            <Recorder room_id={props.room_id}/>
         </div>
     );
 }

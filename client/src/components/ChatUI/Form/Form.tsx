@@ -1,23 +1,20 @@
-'use client';
+"use client";
 import styles from "./Form.module.css";
 import { FormEvent } from "react";
 import { chatLogState } from "@/state/chatLogState";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 interface FormProps {
   room_id: number;
 }
 
 const Form: React.FC<FormProps> = ({ room_id }) => {
-
   // chatLogStateの状態を取得
   const [chatLog, setChatLog] = useRecoilState(chatLogState);
 
   // セッション情報を取得
   const { data: session, status } = useSession();
-
 
   // フォームの送信処理
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -30,7 +27,6 @@ const Form: React.FC<FormProps> = ({ room_id }) => {
 
     // セッション情報が取得できている場合
     if (session && session.user) {
-
       // chatlog用のnewIdの設定
       const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
 
@@ -44,6 +40,7 @@ const Form: React.FC<FormProps> = ({ room_id }) => {
         setChatLog([...chatLog, newUserMessage]);
       }
 
+     
       // ユーザーの入力をAPIに送信
       const res = await fetch(`/api`, {
         method: "POST",
@@ -70,7 +67,6 @@ const Form: React.FC<FormProps> = ({ room_id }) => {
         sender: "AI",
       };
       setChatLog((prevChatLog) => [...prevChatLog, newGPTMessage]);
-
     }
   }
   return (
