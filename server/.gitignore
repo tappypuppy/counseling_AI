@@ -1,7 +1,5 @@
 venv
 .env
 __pycache__
-messages.db
-DB/data/**
 API/src/**
 .DS_Store
