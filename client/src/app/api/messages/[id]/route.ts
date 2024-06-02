@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { id: number } }
 ) {
   console.log("Request received: get_messages", params.id);
-  const res = await fetch("http://localhost:8000/messages/" + params.id + "/", {
+  const res = await fetch(process.env.API_URL + "/messages/" + params.id + "/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",

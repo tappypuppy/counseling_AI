@@ -7,7 +7,7 @@ export const sendPromptToGpt = async (
 ) => {
   console.log("service.ts file");
 
-  const res = await fetch("http://localhost:8000/input/", {
+  const res = await fetch( process.env.API_URL + "/input/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
