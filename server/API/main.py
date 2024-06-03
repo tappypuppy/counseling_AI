@@ -76,7 +76,7 @@ async def upload_audio(audio: UploadFile = File(...)):
 
     return {"result": "Success", "output": output}
 
-@app.post("log-drain")
+@app.post("/log-drain/")
 def log_drain(json: dict):
     print(json)
     return {"result": "Success"}
