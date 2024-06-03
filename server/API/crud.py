@@ -42,13 +42,14 @@ def create_log(payload):
 
     supabase: Client = create_client(url, key)
 
-    payload['timestamp'] = datetime.datetime.fromtimestamp(payload['timestamp']/1000)
+    # payload['timestamp'] = datetime.datetime.fromtimestamp(payload['timestamp']/1000)
 
-    payload['log_id'] = payload.pop('id')
-    payload['project_id'] = payload.pop('projectId')
-    payload['deployment_id'] = payload.pop('deploymentId')
-    payload['build_id'] = payload.pop('buildId')
-    payload['entry_point'] = payload.pop('entrypoint')
+    # payload['log_id'] = payload.pop('id')
+    # payload['project_id'] = payload.pop('projectId')
+    # payload['deployment_id'] = payload.pop('deploymentId')
+    # payload['build_id'] = payload.pop('buildId')
+    # payload['entry_point'] = payload.pop('entrypoint')
 
-    data, count = supabase.table('front_logs').insert(payload).execute()
+    data, count = supabase.table('front_json_logs').insert({"json_log": payload}).execute()
+    print(data)
     return data[1]
