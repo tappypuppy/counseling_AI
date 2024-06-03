@@ -44,5 +44,11 @@ def create_log(payload):
 
     payload['timestamp'] = datetime.datetime.fromtimestamp(payload['timestamp'])
 
+    payload['log_id'] = payload.pop('id')
+    payload['project_id'] = payload.pop('projectId')
+    payload['deployment_id'] = payload.pop('deploymentId')
+    payload['build_id'] = payload.pop('buildId')
+    payload['entry_point'] = payload.pop('entrypoint')
+
     data, count = supabase.table('front_logs').insert(payload).execute()
     return data[1]
