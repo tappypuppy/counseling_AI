@@ -1,3 +1,5 @@
+import { loggerInfo } from "@/lib/pino";
+
 export const sendPromptToGpt = async (
   userEmail: string,
   roomId: number,
@@ -5,7 +7,7 @@ export const sendPromptToGpt = async (
   isAudio: boolean,
   audioFile: string
 ) => {
-  console.log("service.ts file");
+  loggerInfo("Request received", { caller: "sendPromptToGpt", status: 200});
 
   const res = await fetch( process.env.API_URL + "/input/", {
     method: "POST",

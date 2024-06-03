@@ -2,11 +2,16 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { sendPromptToGpt } from "./service";
+import { loggerInfo } from "@/lib/pino";
 
 export async function POST(request: NextRequest) {
-  console.log("Request received");
+  loggerInfo("Request received", { caller: "POST" , status: 200});
   const { userEmail, roomId, message, isAudio, audioFile } =
     await request.json();
+  
+  loggerInfo("userEmail: " + userEmail, { caller: "POST" , status: 200});
+  loggerInfo("roomId: " + roomId, { caller: "POST" , status: 200});
+  loggerInfo("message: " + message, { caller: "POST" , status: 200});
 
   const gptResponseMessage = await sendPromptToGpt(
     userEmail,
@@ -17,12 +22,11 @@ export async function POST(request: NextRequest) {
   );
 
   const gptResponseMessageJson = await gptResponseMessage.json();
-  console.log("gptResponseMessage:", gptResponseMessageJson);
+  loggerInfo("gptResponseMessage: " + gptResponseMessageJson, { caller: "POST" , status: 200});
 
   const response = NextResponse.json({
     data: gptResponseMessageJson,
   });
-  console.log("Response sent");
 
   return response;
 }
