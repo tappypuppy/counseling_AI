@@ -76,5 +76,10 @@ async def upload_audio(audio: UploadFile = File(...)):
 
     return {"result": "Success", "output": output}
 
+@app.post("log-drain")
+def log_drain(json: dict):
+    print(json)
+    return {"result": "Success"}
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
