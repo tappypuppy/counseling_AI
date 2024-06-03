@@ -83,12 +83,12 @@ async def upload_audio(audio: UploadFile = File(...)):
 
 @app.post("/log_drain")
 async def log_drain(request: Request, response: Response):
-    payloads = await request.json()
+    payload = await request.json()
     logger.info(f"Received log: {payloads}")
     x_vercel_verify = os.getenv('X_VERCEL_VERIFY')
     response.headers["x-vercel-verify"] = x_vercel_verify
 
-    create_log(payloads[0])
+    create_log(payload)
     
     return {"status": "200"}
 
