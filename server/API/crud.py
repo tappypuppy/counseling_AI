@@ -42,7 +42,7 @@ def create_log(payload):
 
     supabase: Client = create_client(url, key)
 
-    payload['timestamp'] = datetime.datetime.fromtimestamp(payload['timestamp'])
+    payload['timestamp'] = datetime.datetime.fromtimestamp(payload['timestamp']/1000)
 
     payload['log_id'] = payload.pop('id')
     payload['project_id'] = payload.pop('projectId')
