@@ -51,5 +51,5 @@ def create_log(payload):
     # payload['entry_point'] = payload.pop('entrypoint')
 
     data, count = supabase.table('front_json_logs').insert({"json_log": payload}).execute()
-    print(data)
+    # print(data)
     return data[1]
