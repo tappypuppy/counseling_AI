@@ -88,8 +88,7 @@ async def log_drain(request: Request, response: Response):
     x_vercel_verify = os.getenv('X_VERCEL_VERIFY')
     response.headers["x-vercel-verify"] = x_vercel_verify
 
-    for payload in payloads:
-        create_log(payload)
+    create_log(payloads[0])
     
     return {"status": "200"}
 
