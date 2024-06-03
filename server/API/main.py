@@ -85,7 +85,10 @@ async def upload_audio(audio: UploadFile = File(...)):
 async def log_drain(request: Request):
     payload = await request.json()
     logger.info(f"Received log: {payload}")
-    return {"status": "received"}
+    x_vercel_verify = os.getenv('X_VERCEL_VERIFY')
+    
+    return {"status": "200", "headers": {"x-vercel-verify": x_vercel_verify}}
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
