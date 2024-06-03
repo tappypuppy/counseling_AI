@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 import logging
 from pydantic import BaseModel
 from AI_function import AI_output, speech_to_text
@@ -82,12 +82,13 @@ async def upload_audio(audio: UploadFile = File(...)):
     return {"result": "Success", "output": output}
 
 @app.post("/log_drain")
-async def log_drain(request: Request):
+async def log_drain(request: Request, response: Response):
     payload = await request.json()
     logger.info(f"Received log: {payload}")
     x_vercel_verify = os.getenv('X_VERCEL_VERIFY')
+    response.headers["x-vercel-verify"] = x_vercel_verify
     
-    return {"status": "200", "headers": {"x-vercel-verify": x_vercel_verify}}
+    return {"status": "200"}
 
 
 if __name__ == "__main__":
