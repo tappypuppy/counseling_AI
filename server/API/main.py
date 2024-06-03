@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+import logging
 from pydantic import BaseModel
 from AI_function import AI_output, speech_to_text
 from crud import create_room, get_messages
@@ -13,6 +14,10 @@ from dotenv import load_dotenv
 app = FastAPI()
 
 load_dotenv()
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("vercel_log_drain")
 
 front_end_url = os.getenv('FRONT_END_URL')
 
@@ -76,10 +81,11 @@ async def upload_audio(audio: UploadFile = File(...)):
 
     return {"result": "Success", "output": output}
 
-@app.post("/log-drain/")
-def log_drain(json: dict):
-    print(json)
-    return {"result": "Success"}
+@app.post("/log_drain")
+async def log_drain(request: Request):
+    payload = await request.json()
+    logger.info(f"Received log: {payload}")
+    return {"status": "received"}
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
