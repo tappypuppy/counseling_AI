@@ -1,7 +1,6 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import { SupabaseAdapter } from "@auth/supabase-adapter";
 import google from "next-auth/providers/google";
-import { createStripeCustomer } from "@/lib/stripe";
 
 // console.log(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -21,7 +20,7 @@ export const config: NextAuthConfig = {
     authorized({ request, auth }) {
       try {
         const { pathname } = request.nextUrl;
-        if (pathname === "protected-page") return !!auth;
+        if (pathname === "/newchat" || pathname === "/payment") return !!auth;
         return true;
       } catch (error) {
         console.log(error);
