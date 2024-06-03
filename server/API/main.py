@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, Response
 import logging
 from pydantic import BaseModel
 from AI_function import AI_output, speech_to_text
-from crud import create_room, get_messages
+from crud import create_room, get_messages, create_log
 
 from fastapi import FastAPI,UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -83,10 +83,13 @@ async def upload_audio(audio: UploadFile = File(...)):
 
 @app.post("/log_drain")
 async def log_drain(request: Request, response: Response):
-    payload = await request.json()
-    logger.info(f"Received log: {payload}")
+    payloads = await request.json()
+    logger.info(f"Received log: {payloads}")
     x_vercel_verify = os.getenv('X_VERCEL_VERIFY')
     response.headers["x-vercel-verify"] = x_vercel_verify
+
+    for payload in payloads:
+        create_log(payload)
     
     return {"status": "200"}
 

@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 from supabase import create_client, Client
 from supabase.lib.client_options import ClientOptions
+import datetime
 
 def create_room(user_email):
     load_dotenv()
@@ -31,4 +32,17 @@ def get_messages(room_id):
 
     data, count = supabase.table('messages').select("message, sender").eq('room_id', room_id).execute()
     print(data[1])
+    return data[1]
+
+def create_log(payload):
+    load_dotenv()
+    # Create the session
+    url: str = os.environ.get("SUPABASE_URL")
+    key: str = os.environ.get("SUPABASE_KEY")
+
+    supabase: Client = create_client(url, key)
+
+    payload['timestamp'] = datetime.datetime.fromtimestamp(payload['timestamp'])
+
+    data, count = supabase.table('front_logs').insert(payload).execute()
     return data[1]
