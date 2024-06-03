@@ -84,7 +84,7 @@ async def upload_audio(audio: UploadFile = File(...)):
 @app.post("/log_drain")
 async def log_drain(request: Request, response: Response):
     payload = await request.json()
-    logger.info(f"Received log: {payloads}")
+    logger.info(f"Received log: {payload}")
     x_vercel_verify = os.getenv('X_VERCEL_VERIFY')
     response.headers["x-vercel-verify"] = x_vercel_verify
 
