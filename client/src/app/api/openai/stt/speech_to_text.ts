@@ -1,6 +1,9 @@
 import OpenAI, { ClientOptions } from "openai";
 import fs from "fs";
 import path from "path";
+import { put } from "@vercel/blob";
+
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -19,10 +22,8 @@ const getFormattedDateTime = () => {
 };
 
 export const speechToText = async (audioBlob: Blob) => {
-  const srcURL = `./audio/speech_${getFormattedDateTime()}.mp3`;
-  const speechFile = path.resolve(
-    `./public/audio/speech_${getFormattedDateTime()}.mp3`
-  );
+  const srcURL = `/audio/input/speech_${getFormattedDateTime()}.mp3`;
+  
 
   // Code to convert audioBlob to speech
   // blob to file
@@ -32,6 +33,8 @@ export const speechToText = async (audioBlob: Blob) => {
     model: "whisper-1",
   });
   console.log("Transcription:", transcription.text);
+  const { url } = await put(srcURL, audioFile, { access: 'public' });
+  console.log("Audio URL:", url);
 
   return transcription.text;
 };

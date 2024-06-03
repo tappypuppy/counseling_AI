@@ -1,6 +1,7 @@
 import OpenAI, { ClientOptions } from "openai";
 import fs from "fs";
 import path from "path";
+import { put } from "@vercel/blob";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -25,10 +26,11 @@ export const textToSpeech = async (text: string) => {
   });
 
   const buffer = Buffer.from(await response.arrayBuffer());
-  const srcURL = `./audio/speech_${getFormattedDateTime()}.mp3`;
-  const speechFile = path.resolve(`./public/audio/speech_${getFormattedDateTime()}.mp3`);
-  await fs.promises.writeFile(speechFile, buffer);
-  console.log(`Audio saved to ${speechFile}`);
+  const srcURL = `/audio/output/speech_${getFormattedDateTime()}.mp3`;
+  // const speechFile = path.resolve(`./public/audio/speech_${getFormattedDateTime()}.mp3`);
+  // await fs.promises.writeFile(speechFile, buffer);
+  const { url } = await put(srcURL, buffer, { access: 'public' });
+  console.log(`Audio saved to ${url}`);
 
-  return srcURL;
+  return url;
 };
