@@ -23,12 +23,12 @@ export const speechToText = async (audioBlob: Blob) => {
   const speechFile = path.resolve(
     `./public/audio/speech_${getFormattedDateTime()}.mp3`
   );
-  const arrayBuffer = await audioBlob.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  await fs.promises.writeFile(speechFile, buffer);
+
   // Code to convert audioBlob to speech
+  // blob to file
+  const audioFile = new File([audioBlob], "audio.wav", { type: audioBlob.type, lastModified: Date.now() });
   const transcription = await openai.audio.transcriptions.create({
-    file: fs.createReadStream(speechFile),
+    file: audioFile,
     model: "whisper-1",
   });
   console.log("Transcription:", transcription.text);
