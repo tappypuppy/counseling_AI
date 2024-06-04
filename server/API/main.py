@@ -59,27 +59,13 @@ def room(room: Room):
     room_id = create_room(room.user_email)
     return {'room_id': room_id}
 
-@app.get('/messages/{room_id}')
-def messages(room_id: int):
-    messages = get_messages(room_id)
+@app.get('/messages/{room_id}/')
+async def messages(room_id: int):
+    logger.info(f"Getting messages for room {room_id}")
+    messages = await get_messages(room_id)
     return {'messages': messages}
 
 
-@app.post("/audio_input/")
-async def upload_audio(audio: UploadFile = File(...)):
-    contents = await audio.read()
-    filename = 'test.wav'
-    # Save the audio file
-    file_path = os.path.join("./src", filename)
-    with open(file_path, "wb") as file:
-        file.write(contents)
-    
-
-    text = speech_to_text(file_path)
-    output = AI_output("test", text)
-    print(text)
-
-    return {"result": "Success", "output": output}
 
 @app.post("/log_drain")
 async def log_drain(request: Request, response: Response):

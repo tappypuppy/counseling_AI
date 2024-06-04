@@ -22,7 +22,7 @@ def create_room(user_email):
 
     return room_id
 
-def get_messages(room_id):
+async def get_messages(room_id):
     load_dotenv()
     # Create the session
     url: str = os.environ.get("SUPABASE_URL")
@@ -31,7 +31,7 @@ def get_messages(room_id):
     supabase: Client = create_client(url, key)
 
     data, count = supabase.table('messages').select("message, sender").eq('room_id', room_id).execute()
-    print(data[1])
+    print('[FUNCION]: get_messages: ',data[1])
     return data[1]
 
 def create_log(payload):
@@ -41,14 +41,6 @@ def create_log(payload):
     key: str = os.environ.get("SUPABASE_KEY")
 
     supabase: Client = create_client(url, key)
-
-    # payload['timestamp'] = datetime.datetime.fromtimestamp(payload['timestamp']/1000)
-
-    # payload['log_id'] = payload.pop('id')
-    # payload['project_id'] = payload.pop('projectId')
-    # payload['deployment_id'] = payload.pop('deploymentId')
-    # payload['build_id'] = payload.pop('buildId')
-    # payload['entry_point'] = payload.pop('entrypoint')
 
     data, count = supabase.table('front_json_logs').insert({"json_log": payload}).execute()
     # print(data)
