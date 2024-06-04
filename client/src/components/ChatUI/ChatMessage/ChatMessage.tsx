@@ -36,21 +36,6 @@ export default function ChatMessage( { room_id }: ChatMessageProps) {
 
 
 
-  // async function get_messages() {
-  //   const res = await fetch("http://localhost:8000/messages/" + room_id + "/", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json;charset=UTF-8",
-  //     },
-  //   });
-
-  //   console.log("Response received: get_messages", await res);
-  //   return res;
-  // }
-
-
-
-
   return (
     <div className={styles.chat}>
       <div className={styles.inner}>
