@@ -1,3 +1,8 @@
+/* 
+  このファイルは、ミドルウェアを定義するためのファイルです。
+  ミドルウェアは、リクエストを処理する前に実行される関数です。
+*/
+
 export {auth as middleware} from "@/auth"
 import { auth } from "@/auth"
  

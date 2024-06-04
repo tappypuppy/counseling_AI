@@ -1,5 +1,8 @@
-import "server-only";
+/* 
+ stripe.ts は、Stripe API を使用するためのヘルパー関数を提供します。
+*/
 
+import "server-only";
 import Stripe from "stripe";
 import { supabase } from "@/lib/supabaseClient";
 

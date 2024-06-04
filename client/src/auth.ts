@@ -1,3 +1,8 @@
+/* 
+  このファイルは、NextAuth の設定ファイルです。
+  NextAuth は、認証に関する機能を提供します。
+ */
+
 import NextAuth, { NextAuthConfig } from "next-auth";
 import { SupabaseAdapter } from "@auth/supabase-adapter";
 import google from "next-auth/providers/google";
