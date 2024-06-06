@@ -38,7 +38,6 @@ export async function GET(req: NextRequest) {
   }
 
   loggerInfo("Posts are successfully retrieved.", { caller: "GET", status: 200 });
-  console.log(data);
 
   return NextResponse.json(data);
 }
