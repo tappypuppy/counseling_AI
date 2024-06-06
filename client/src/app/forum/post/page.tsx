@@ -1,9 +1,11 @@
+import TextareaForm from "@/components/Forum/PostForm/post";
+import { SessionProvider } from "next-auth/react";
 function page() {
-    return (
-        <div>
-            Enter
-        </div>
-    );
+  return (
+    <SessionProvider>
+      <TextareaForm />
+    </SessionProvider>
+  );
 }
 
 export default page;
