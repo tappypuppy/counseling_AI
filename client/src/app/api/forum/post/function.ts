@@ -10,7 +10,6 @@ export async function get_user_id(email: string) {
   }
 
   loggerInfo("User ID is successfully retrieved.", { caller: "get_user_id", status: 200 });
-  console.log(data[0].id);
 
   const user_id = data[0].id;
 

@@ -25,7 +25,6 @@ export async function POST(req: NextRequest) {
   }
 
   loggerInfo("Post is successfully inserted.", { caller: "POST", status: 200 });
-  console.log(data);
 
   return NextResponse.json({ status: "ok" });
 }
