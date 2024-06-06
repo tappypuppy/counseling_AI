@@ -25,7 +25,7 @@ export const config: NextAuthConfig = {
     authorized({ request, auth }) {
       try {
         const { pathname } = request.nextUrl;
-        if (pathname === "/newchat" || pathname === "/payment") return !!auth;
+        if (pathname === "/newchat" || pathname === "/payment" || pathname === "/forum") return !!auth;
         return true;
       } catch (error) {
         console.log(error);
