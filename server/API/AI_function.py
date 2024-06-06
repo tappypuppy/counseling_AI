@@ -94,15 +94,6 @@ def AI_output(user_email:str,room_id:int, message:str, is_audio:bool, audio_file
     return generated_message
 
 
-def speech_to_text(file_path):
-    load_dotenv()
-    client  = openai.OpenAI()
-    with open(file_path, "rb") as file:
-        transcript = client.audio.transcriptions.create(
-            model="whisper-1",
-            file=file,
-            language="ja",) 
-    return transcript.text
 
 
 

@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Request, Response
 import logging
 from pydantic import BaseModel
-from AI_function import AI_output, speech_to_text
+from AI_function import AI_output
 from crud import create_room, get_messages, create_log
 
-from fastapi import FastAPI,UploadFile, File
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
@@ -77,6 +77,7 @@ async def log_drain(request: Request, response: Response):
     create_log(payload)
     
     return {"status": "200"}
+
 
 
 if __name__ == "__main__":
