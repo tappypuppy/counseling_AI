@@ -28,3 +28,17 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ status: "ok" });
 }
+
+export async function GET(req: NextRequest) {
+  const { data, error } = await supabase.from("posts").select();
+
+  if (error) {
+    console.error(error);
+    return NextResponse.json({ status: "error" });
+  }
+
+  loggerInfo("Posts are successfully retrieved.", { caller: "GET", status: 200 });
+  console.log(data);
+
+  return NextResponse.json(data);
+}

@@ -38,6 +38,14 @@ export function MainNav() {
               payment
             </NavigationMenuLink>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              href="/forum"
+              className={navigationMenuTriggerStyle()}
+            >
+              forum
+            </NavigationMenuLink>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </div>

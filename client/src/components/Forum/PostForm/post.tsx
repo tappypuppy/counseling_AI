@@ -68,7 +68,7 @@ export default function TextareaForm() {
               <FormLabel>Post</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="悲しい出来事を共有してください。"
+                  placeholder="入力してください..."
                   className="resize-none"
                   {...field}
                 />
