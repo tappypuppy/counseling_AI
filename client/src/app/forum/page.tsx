@@ -17,10 +17,9 @@ function Page() {
         })
         .then((res) => res.json())
         .then((data) => {
-
             setPosts(data);
         });
-    }, [posts]);
+    }, []);
 
   return (
     <div className={styles.inner}>
