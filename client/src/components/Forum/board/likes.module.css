@@ -1,0 +1,5 @@
+.inner {
+    display: flex;
+    column-gap: 5px;
+    cursor: pointer;
+}

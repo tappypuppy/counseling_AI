@@ -1,37 +1,45 @@
-'use client';
-import TextareaForm from "@/components/Forum/PostForm/post";
+"use client";
 import { SessionProvider } from "next-auth/react";
-import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 
+import TextareaForm from "@/components/Forum/PostForm/post";
+import Likes from "@/components/Forum/board/likes";
+import styles from "./page.module.css";
+
 function Page() {
+  const [posts, setPosts] = useState([]); // posts = [{id: 1, message: "hello"}, {id: 2, message: "hi"}
 
-    const [posts, setPosts] = useState([]); // posts = [{id: 1, message: "hello"}, {id: 2, message: "hi"}
-
-    useEffect(() => {
-        fetch("/api/forum/post/", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json;charset=UTF-8",
-            },
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            setPosts(data);
-        });
-    }, []);
+  useEffect(() => {
+    fetch("/api/forum/post/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+        console.log(data);
+      });
+  }, []);
 
   return (
     <div className={styles.inner}>
-        <SessionProvider>
-            <TextareaForm />
-        </SessionProvider>
-        <div className={styles.posts}>
-            {posts.map((post: { id: number, message: string }) => (
-                    <div key={post.id} className={styles.post}>{post.message}</div>
-            ))}
-            
-        </div>
+      <SessionProvider>
+        <TextareaForm />
+      </SessionProvider>
+      <div className={styles.posts}>
+        {posts.map((post: { id: number; message: string }) => (
+          <div key={post.id} className={styles.post}>
+            <div className={styles.post_text}>
+              {post.message}
+            </div>
+            <SessionProvider>
+              <Likes post_id={post.id} />
+            </SessionProvider>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
