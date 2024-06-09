@@ -36,7 +36,7 @@ export async function GET(
     status: 200,
   });
 
-  console.log(data);
+  console.log("ISLIKE:",data);
 
   return NextResponse.json(data);
 }

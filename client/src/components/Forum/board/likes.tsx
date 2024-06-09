@@ -64,6 +64,7 @@ function Likes(props: LikesProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
+          "cache-control": "no-cache",
         },
         body: JSON.stringify({
           post_id: props.post_id,
@@ -77,6 +78,7 @@ function Likes(props: LikesProps) {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
+          "cache-control": "no-cache",
         },
         body: JSON.stringify({
           post_id: props.post_id,

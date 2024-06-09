@@ -8,8 +8,8 @@
 * isAudio=Trueの時、audio fileのURLをsupabaseに保存
 * fileの命名規則の統一化
 * tailwindcssに書き換え
-* 掲示板、いいね機能追加
 * inputを入力したら未入力状態に戻す
 * 掲示板、ページネーション追加
 * 掲示板、アバターと名前を追加
 * postのuseRecoil化
+* いいね機能がデプロイ後に使えないのを修正
