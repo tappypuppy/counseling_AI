@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import { chatLogState } from "@/state/chatLogState";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
@@ -168,8 +169,16 @@ const Recorder: React.FC = () => {
 
   return (
     <div>
-      {!recording && <button onClick={startRecording}>録音開始</button>}
-      {recording && <button onClick={stopRecording}>録音停止</button>}
+      {!recording && (
+        <button onClick={startRecording}>
+          <Image src="/audio-off.svg" alt="microphone" width={24} height={24} />
+        </button>
+      )}
+      {recording && (
+        <button onClick={stopRecording}>
+          <Image src="/audio-on.svg" alt="microphone" width={24} height={24} />
+        </button>
+      )}
     </div>
   );
 };
