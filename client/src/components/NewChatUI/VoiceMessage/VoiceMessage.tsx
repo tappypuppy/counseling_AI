@@ -170,14 +170,6 @@ const Recorder: React.FC = () => {
     <div>
       {!recording && <button onClick={startRecording}>録音開始</button>}
       {recording && <button onClick={stopRecording}>録音停止</button>}
-      {audioUrl && (
-        <div>
-          <audio src={audioUrl} controls />
-          <a href={audioUrl} download="recording.wav">
-            Download
-          </a>
-        </div>
-      )}
     </div>
   );
 };
