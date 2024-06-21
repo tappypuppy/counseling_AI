@@ -37,7 +37,7 @@ function Post(props: PostProps) {
         )}
         <AvatarFallback>{postInfo?.name}</AvatarFallback>
       </Avatar>
-      {postInfo && postInfo["name"]}
+      <div className={styles.name}>{postInfo && postInfo["name"]}</div>
     </div>
   );
 }

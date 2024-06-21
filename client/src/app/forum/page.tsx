@@ -32,10 +32,8 @@ function Page() {
       <div className={styles.posts}>
         {posts.map((post: { id: number; message: string }) => (
           <div key={post.id} className={styles.post}>
-            <div className={styles.post_text}>
-              <Post post_id={post.id}/>
-              {post.message}
-            </div>
+            <Post post_id={post.id} />
+            <div className={styles.post_text}>{post.message}</div>
             <SessionProvider>
               <Likes post_id={post.id} />
             </SessionProvider>

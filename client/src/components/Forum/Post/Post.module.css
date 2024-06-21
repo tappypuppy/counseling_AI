@@ -3,3 +3,7 @@
     align-items: center;
     column-gap: 10px;
 }
+
+.name {
+    font-weight: 500;
+}
