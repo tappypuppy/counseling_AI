@@ -3,12 +3,8 @@ import { useRecoilState } from "recoil";
 import { chatLogState } from "@/state/chatLogState";
 import styles from "./ChatMessage.module.css";
 
-
 export default function ChatMessage() {
-
   const [chatLog, setChatLog] = useRecoilState(chatLogState);
-  
-
 
   return (
     <div className={styles.chat}>
@@ -18,7 +14,7 @@ export default function ChatMessage() {
             key={message.id}
             className={message.sender === "gpt" ? styles.gpt : styles.user}
           >
-            {message.sender}: {message.context}
+            {message.context}
           </div>
         ))}
       </div>

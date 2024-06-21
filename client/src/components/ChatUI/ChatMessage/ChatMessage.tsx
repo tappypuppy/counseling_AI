@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { chatLogState } from "@/state/chatLogState";
@@ -8,8 +8,7 @@ interface ChatMessageProps {
   room_id: number;
 }
 
-export default function ChatMessage( { room_id }: ChatMessageProps) {
-
+export default function ChatMessage({ room_id }: ChatMessageProps) {
   const [chatLog, setChatLog] = useRecoilState(chatLogState);
 
   useEffect(() => {
@@ -21,20 +20,19 @@ export default function ChatMessage( { room_id }: ChatMessageProps) {
     })
       .then((res) => res.json())
       .then((data) => {
-        const messages = data.messages
-        console.log(messages)
+        const messages = data.messages;
+        console.log(messages);
         // ex. messages = [ { 'message' : 'hello', 'sender' : 'AI' }, { 'message' : 'hi', 'sender' : 'user'}]
-        
-        setChatLog(messages.map((message:any, index:any) => ({
-          id: index,
-          context: message.message,
-          sender: message.sender
-        })))
-      }
-    )
+
+        setChatLog(
+          messages.map((message: any, index: any) => ({
+            id: index,
+            context: message.message,
+            sender: message.sender,
+          }))
+        );
+      });
   }, []);
-
-
 
   return (
     <div className={styles.chat}>
@@ -44,7 +42,7 @@ export default function ChatMessage( { room_id }: ChatMessageProps) {
             key={message.id}
             className={message.sender === "AI" ? styles.gpt : styles.user}
           >
-            {message.sender}: {message.context}
+            {message.context}
           </div>
         ))}
       </div>
