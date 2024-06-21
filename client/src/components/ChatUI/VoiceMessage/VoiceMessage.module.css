@@ -1,0 +1,10 @@
+.inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.audio_img {
+    border-radius: 10px;
+    cursor: pointer;
+}

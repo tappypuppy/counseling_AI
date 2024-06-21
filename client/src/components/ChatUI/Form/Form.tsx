@@ -1,6 +1,8 @@
 "use client";
 import styles from "./Form.module.css";
 import { FormEvent } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { chatLogState } from "@/state/chatLogState";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
@@ -70,10 +72,12 @@ const Form: React.FC<FormProps> = ({ room_id }) => {
     }
   }
   return (
-    <div>
+    <div className={styles.inner}>
       <form onSubmit={onSubmit} className={styles.form}>
         <input type="text" name="input" placeholder="メッセージを入力..." />
-        <button type="submit">送信</button>
+        <button type="submit">
+          <FontAwesomeIcon icon={faPaperPlane} />
+        </button>
       </form>
     </div>
   );

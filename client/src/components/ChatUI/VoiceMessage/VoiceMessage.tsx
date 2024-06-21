@@ -4,6 +4,7 @@ import Image from "next/image";
 import { chatLogState } from "@/state/chatLogState";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
+import styles from "./VoiceMessage.module.css";
 
 interface RecorderProps {
   room_id: number;
@@ -152,15 +153,15 @@ const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
   };
 
   return (
-    <div>
+    <div className={styles.inner}>
       {!recording && (
         <button onClick={startRecording}>
-          <Image src="/audio-off.svg" alt="microphone" width={24} height={24} />
+          <Image className={styles.audio_img} src="/audio-off.svg" alt="microphone" width={24} height={24} />
         </button>
       )}
       {recording && (
         <button onClick={stopRecording}>
-          <Image src="/audio-on.svg" alt="microphone" width={24} height={24} />
+          <Image className={styles.audio_img} src="/audio-on.svg" alt="microphone" width={24} height={24} />
         </button>
       )}
     </div>
