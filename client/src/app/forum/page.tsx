@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import TextareaForm from "@/components/Forum/PostForm/post";
 import Likes from "@/components/Forum/board/likes";
+import Post from "@/components/Forum/Post/Post";
 import styles from "./page.module.css";
 
 function Page() {
@@ -32,6 +33,7 @@ function Page() {
         {posts.map((post: { id: number; message: string }) => (
           <div key={post.id} className={styles.post}>
             <div className={styles.post_text}>
+              <Post post_id={post.id}/>
               {post.message}
             </div>
             <SessionProvider>
