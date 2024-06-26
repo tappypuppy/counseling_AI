@@ -24,7 +24,6 @@ function Post(props: PostProps) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setPostInfo(data);
       });
   }, []);

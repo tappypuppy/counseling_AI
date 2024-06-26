@@ -30,13 +30,14 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const { data, error } = await supabase.from("posts").select();
+  const { data, error } = await supabase.from("posts").select('*');
 
   if (error) {
     console.error(error);
     return NextResponse.json({ status: "error" });
   }
 
+  console.log("DATA:", data);
   loggerInfo("Posts are successfully retrieved.", { caller: "GET", status: 200 });
 
   return NextResponse.json(data);

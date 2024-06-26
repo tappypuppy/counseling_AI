@@ -35,11 +35,8 @@ export default function TextareaForm() {
   const { data: session, status } = useSession();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-
+ 
     if (session && session.user) {
-      console.log("User is signed in.");
-      console.log(session.user);
 
       const res = await fetch("/api/forum/post", {
         method: "POST",
@@ -53,7 +50,6 @@ export default function TextareaForm() {
       });
 
       const res_json = await res.json();
-      console.log(res_json);
     }
   }
 
@@ -65,7 +61,7 @@ export default function TextareaForm() {
           name="post"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Post</FormLabel>
+              {/* <FormLabel>Post</FormLabel> */}
               <FormControl>
                 <Textarea
                   placeholder="入力してください..."
