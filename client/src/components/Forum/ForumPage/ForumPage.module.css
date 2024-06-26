@@ -1,0 +1,20 @@
+.inner {
+    padding: 4%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.posts {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+.post {
+    border: solid 1px #000;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
