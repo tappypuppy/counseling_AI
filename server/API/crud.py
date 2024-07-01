@@ -4,36 +4,6 @@ from supabase import create_client, Client
 from supabase.lib.client_options import ClientOptions
 import datetime
 
-def create_room(user_email):
-    load_dotenv()
-    # Create the session
-    url: str = os.environ.get("SUPABASE_URL")
-    key: str = os.environ.get("SUPABASE_KEY")
-
-    auth_opts = ClientOptions().replace(schema='next_auth')
-    supabase_auth: Client = create_client(url, key, auth_opts)
-    supabase: Client = create_client(url, key)
-
-    user_id_data = supabase_auth.table('users').select("id").eq('email', user_email).execute()
-    user_id = user_id_data.data[0]['id']
-
-    data, count = supabase.table('rooms').insert({"user_id": user_id}).execute()
-    room_id = data[1][0]['id']
-
-    return room_id
-
-async def get_messages(room_id):
-    load_dotenv()
-    # Create the session
-    url: str = os.environ.get("SUPABASE_URL")
-    key: str = os.environ.get("SUPABASE_KEY")
-
-    supabase: Client = create_client(url, key)
-
-    data, count = supabase.table('messages').select("message, sender").eq('room_id', room_id).execute()
-    print('[FUNCION]: get_messages: ',data[1])
-    return data[1]
-
 def create_log(payload):
     load_dotenv()
     # Create the session

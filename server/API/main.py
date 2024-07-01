@@ -32,11 +32,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
 class Item(BaseModel):
     user_email: str
     room_id: int
@@ -44,27 +39,12 @@ class Item(BaseModel):
     is_audio: bool
     audio_file: str
 
-class Room(BaseModel):
-    user_email: str
-
 
 @app.post("/input/")
 def process_item(item: Item):
     output = AI_output(user_email=item.user_email, room_id=item.room_id ,message=item.message, is_audio=item.is_audio, audio_file=item.audio_file)
     # Process the input_text here
     return {"result": "Success", "output": output}
-
-@app.post('/create_room/')
-def room(room: Room):
-    room_id = create_room(room.user_email)
-    return {'room_id': room_id}
-
-@app.get('/messages/{room_id}/')
-async def messages(room_id: int):
-    logger.info(f"Getting messages for room {room_id}")
-    messages = await get_messages(room_id)
-    return {'messages': messages}
-
 
 
 @app.post("/log_drain")
