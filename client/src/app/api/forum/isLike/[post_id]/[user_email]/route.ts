@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
 import { loggerInfo } from "@/lib/pino";
-import { get_user_id } from "@/app/api/forum/post/function";
+import { get_user_id } from "@/app/api/function";
 
 export async function GET(
   req: NextRequest,

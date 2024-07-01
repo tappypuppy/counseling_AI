@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
-import { get_user_id } from "@/app/api/forum/post/function";
+import { get_user_id } from "@/app/api/function";
 import { loggerInfo } from "@/lib/pino";
 
 export async function POST(req: NextRequest) {
