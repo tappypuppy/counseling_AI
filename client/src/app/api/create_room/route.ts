@@ -7,20 +7,14 @@ import { create_room } from "./service";
 
 export async function POST(request: NextRequest) {
   console.log("Request received: create_room");
-  const { userEmail } =
-    await request.json();
+  const { userEmail } = await request.json();
 
-  const function_message = await create_room(
-    userEmail,
-  );
+  const room_id = await create_room(userEmail);
 
-  const function_message_json = await function_message.json();
-  console.log("function_message:", function_message_json);
-
+  console.log("ROOM_ID:", room_id)
   const response = NextResponse.json({
-    data: function_message_json,
+    data: { room_id: room_id },
   });
-  console.log("Response sent");
 
   return response;
 }
