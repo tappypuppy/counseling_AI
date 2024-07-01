@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, Response
 import logging
 from pydantic import BaseModel
 from AI_function import AI_output
-from crud import create_room, get_messages, create_log
+from crud import create_log
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

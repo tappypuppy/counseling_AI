@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 import os
 from supabase import create_client, Client
 from supabase.lib.client_options import ClientOptions
-import datetime
 
 def create_log(payload):
     load_dotenv()
