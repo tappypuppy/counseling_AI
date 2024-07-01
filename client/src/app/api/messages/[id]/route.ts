@@ -5,7 +5,10 @@
 */
 
 import { NextRequest, NextResponse } from "next/server";
+
 import { loggerInfo } from "@/lib/pino";
+import { supabase } from "@/lib/supabaseClient";
+import { get_user_id } from "@/app/api/function";
 
 export async function GET(
   request: NextRequest,
@@ -14,18 +17,14 @@ export async function GET(
 
   loggerInfo("Request received", { caller: "GET", status: 200 });
 
-  // Nextjs fetchはデフォルトでキャッシュされるため、キャッシュされないようにする
-  const res = await fetch(process.env.API_URL + "/messages/" + params.id + "/", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8",
-      "Cache-Control": "no-store",
-    },
-  });
+  const { data, error } = await supabase
+    .from("messages")
+    .select("message, sender")
+    .eq("room_id", params.id);
 
-  const res_json = await res.json();
+  const response = NextResponse.json({ messages: data});
 
-  console.log("Response received: get_messages", res_json);
-  loggerInfo("Response received: get_messages" + res_json, { caller: "GET", status: 200 })
-  return NextResponse.json(res_json);
+  console.log("Response received: get_messages", response);
+
+  return response;
 }
