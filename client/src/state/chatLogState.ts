@@ -8,7 +8,7 @@ interface Message {
   sender: string;
 }
 
-// gptResponseStateの型をMessageの配列として定義
+
 export const chatLogState = atom<Message[]>({
   key: 'chatLogState',
   default: [

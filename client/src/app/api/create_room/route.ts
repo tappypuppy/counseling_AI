@@ -10,15 +10,15 @@ export async function POST(request: NextRequest) {
   const { userEmail } =
     await request.json();
 
-  const gptResponseMessage = await create_room(
+  const function_message = await create_room(
     userEmail,
   );
 
-  const gptResponseMessageJson = await gptResponseMessage.json();
-  console.log("gptResponseMessage:", gptResponseMessageJson);
+  const function_message_json = await function_message.json();
+  console.log("function_message:", function_message_json);
 
   const response = NextResponse.json({
-    data: gptResponseMessageJson,
+    data: function_message_json,
   });
   console.log("Response sent");
 
