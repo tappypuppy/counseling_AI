@@ -1,11 +1,12 @@
+import { SupabaseClient } from '@supabase/supabase-js';
 /* 
  このファイルは、掲示板機能の投稿をポストするメソッドを定義しています。
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
-import { get_user_id } from "@/app/api/function";
+
 import { loggerInfo } from "@/lib/pino";
+import DB from "@/class/DB";
 
 export async function POST(req: NextRequest) {
   const { userEmail, message } = await req.json();
@@ -13,9 +14,10 @@ export async function POST(req: NextRequest) {
     timeZone: "Asia/Tokyo",
   });
 
-  const userId = await get_user_id(userEmail);
+  const db = new DB();
+  const userId = await db.getUserId(userEmail);
 
-  const { data, error } = await supabase
+  const { data, error } = await db.supabaseClient
     .from("posts")
     .insert([{ user_id: userId, posted_at: timestamp, message: message }]);
 
@@ -30,7 +32,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const { data, error } = await supabase.from("posts").select('*');
+  const db = new DB();
+  const { data, error } = await db.supabaseClient.from("posts").select('*');
 
   if (error) {
     console.error(error);

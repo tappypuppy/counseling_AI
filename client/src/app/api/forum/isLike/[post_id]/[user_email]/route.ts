@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
 import { loggerInfo } from "@/lib/pino";
 import { get_user_id } from "@/app/api/function";
+import DB from "@/class/DB";
 
 export async function GET(
   req: NextRequest,
@@ -13,13 +14,10 @@ export async function GET(
 ) {
   const { post_id, user_email } = params;
 
-  // console.log(req);
-  console.log("POST_ID:", post_id);
-  console.log("USER_EMAIL:", user_email);
-  const user_id = await get_user_id(user_email);
-  console.log("USER_ID:", user_id);
+  const db = new DB();
+  const user_id = await db.getUserId(user_email);
 
-  const { data, error } = await supabase
+  const { data, error } = await db.supabaseClient
     .from("likes")
     .select("post_id")
     .eq("post_id", post_id)
@@ -35,8 +33,6 @@ export async function GET(
     caller: "GET",
     status: 200,
   });
-
-  console.log("ISLIKE:", data);
 
   return NextResponse.json(data);
 }

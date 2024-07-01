@@ -1,23 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { loggerInfo } from "@/lib/pino";
-import { supabase, supabase_auth } from "@/lib/supabaseClient";
-import { get_user_data } from "@/app/api/function";
+import DB from "@/class/DB";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: number } }
 ) {
-  loggerInfo("Request received", { caller: "GET", status: 200 });
-  const { data, error } = await supabase
+  loggerInfo("api::post/[id]", { caller: "GET", status: 200 });
+
+  const { id } = params;
+
+  const db = new DB();
+  const { data, error } = await db.supabaseClient
     .from("posts")
     .select("user_id")
-    .eq("id", params.id);
+    .eq("id", id);
 
   if (error) {
     console.error(error);
     return NextResponse.json({ status: "error" });
   }
-  const user_id = data[0].user_id;
+  const userId = data[0].user_id;
 
   /* 
  user_data example: 
@@ -27,9 +31,9 @@ export async function GET(
  }
  */
 
-  const user_data = await get_user_data(user_id);
+  const userData = await db.getUserData(userId);
 
-  console.log("USER_DATA:", user_data);
+  console.log("USER_DATA:", userData);
 
-  return NextResponse.json(user_data);
+  return NextResponse.json(userData);
 }

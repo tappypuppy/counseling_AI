@@ -1,20 +1,20 @@
+import { SupabaseClient } from '@supabase/supabase-js';
 /* 
  このファイルは、いいね機能のAPIエンドポイントを定義するファイルです。
 */
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+
 import { loggerInfo } from "@/lib/pino";
-import { get_user_id } from "@/app/api/function";
+import DB from "@/class/DB";
 
 
 export async function POST(req: NextRequest) {
   const { post_id, userEmail } = await req.json();
-  const userId = await get_user_id(userEmail);
+  const db = new DB();
+  const userId = await db.getUserId(userEmail);
 
-  const { data, error } = await supabase
-    .from("likes")
-    .insert([{ user_id: userId, post_id: post_id }]);
+  const { data, error } = await db.supabaseClient.from("likes").insert([{ user_id: userId, post_id: post_id }]);
 
   if (error) {
     console.error(error);
@@ -28,9 +28,12 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const { post_id, userEmail } = await req.json();
-  const userId = await get_user_id(userEmail);
 
-  const { data, error } = await supabase
+  const db = new DB();
+
+  const userId = await db.getUserId(userEmail);
+
+  const { data, error } = await db.supabaseClient
     .from("likes")
     .delete()
     .eq("user_id", userId)

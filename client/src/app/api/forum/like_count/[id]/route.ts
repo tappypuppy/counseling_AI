@@ -3,15 +3,19 @@
 */
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+
 import { loggerInfo } from "@/lib/pino";
+import DB from "@/class/DB";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: number } }
 ) {
   const { id } = params;
-  const { count, error } = await supabase
+
+  const db = new DB();
+  
+  const { count, error } = await db.supabaseClient
     .from("likes")
     .select('*', { count: 'exact', head: true })
     .eq("post_id", id);
@@ -25,8 +29,6 @@ export async function GET(
     caller: "GET",
     status: 200,
   });
-
-  console.log(count);
 
   return NextResponse.json(count);
 }
