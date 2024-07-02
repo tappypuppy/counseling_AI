@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { chatLogState } from "@/state/chatLogState";
-import styles from "./ChatMessage.module.css";
+import styles from "./page.module.css";
 
 interface ChatMessageProps {
   room_id?: number;

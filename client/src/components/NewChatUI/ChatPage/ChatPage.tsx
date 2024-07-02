@@ -2,7 +2,7 @@
 import ChatMessage from "@/components/ChatUI/ChatMessage/ChatMessage";
 import Form from "@/components/ChatUI/Form/Form";
 import Recorder from "@/components/ChatUI/VoiceMessage/VoiceMessage";
-import styles from "./ChatPage.module.css";
+import styles from "./page.module.css";
 
 function ChatPage() {
   return (
