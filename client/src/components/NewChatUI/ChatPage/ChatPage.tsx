@@ -1,6 +1,7 @@
-import ChatMessage from "../ChatMessage/ChatMessage";
-import Form from "../Form/Form";
-import Recorder from "../VoiceMessage/VoiceMessage";
+// import ChatMessage from "../ChatMessage/ChatMessage";
+import ChatMessage from "@/components/ChatUI/ChatMessage/ChatMessage";
+import Form from "@/components/ChatUI/Form/Form";
+import Recorder from "@/components/ChatUI/VoiceMessage/VoiceMessage";
 import styles from "./ChatPage.module.css";
 
 function ChatPage() {

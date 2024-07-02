@@ -4,10 +4,11 @@ import Image from "next/image";
 import { chatLogState } from "@/state/chatLogState";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import styles from "./VoiceMessage.module.css";
 
 interface RecorderProps {
-  room_id: number;
+  room_id?: number | undefined;
 }
 
 const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
@@ -27,6 +28,8 @@ const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
 
   // セッション情報を取得
   const { data: session, status } = useSession();
+
+  const router = useRouter();
 
   // 録音開始処理
   const startRecording = async () => {
@@ -87,6 +90,24 @@ const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
 
           // セッション情報が取得できている場合
           if (session && session.user) {
+            let roomId = room_id;
+            if (room_id === undefined) {
+              // 新規ルームの作成
+              const res_create_room = await fetch("/api/create_room", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json;charset=UTF-8",
+                },
+                body: JSON.stringify({
+                  userEmail: session.user.email,
+                }),
+              });
+
+              // 新規ルームのIDを取得
+              const res_json = await res_create_room.json();
+              roomId = res_json.data.room_id;
+            }
+
             // テキスト化した入力をAPIに送信
             const res = await fetch(`/api`, {
               method: "POST",
@@ -95,7 +116,7 @@ const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
               },
               body: JSON.stringify({
                 userEmail: session?.user?.email,
-                roomId: room_id,
+                roomId: roomId,
                 message: output_text,
                 isAudio: true,
                 audioFile: "",
@@ -130,6 +151,11 @@ const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
             console.log("TTS response:", tts_data.srcUrl);
             const audio = new Audio(tts_data.srcUrl);
             audio.play();
+
+            if (room_id === undefined) {
+              // チャットルームに遷移
+              router.push(`/chat/${roomId}`);
+            }
           }
         } else {
           console.error("Server response is not JSON", await response.text());
@@ -156,12 +182,24 @@ const Recorder: React.FC<RecorderProps> = ({ room_id }) => {
     <div className={styles.inner}>
       {!recording && (
         <button onClick={startRecording}>
-          <Image className={styles.audio_img} src="/audio-off.svg" alt="microphone" width={24} height={24} />
+          <Image
+            className={styles.audio_img}
+            src="/audio-off.svg"
+            alt="microphone"
+            width={24}
+            height={24}
+          />
         </button>
       )}
       {recording && (
         <button onClick={stopRecording}>
-          <Image className={styles.audio_img} src="/audio-on.svg" alt="microphone" width={24} height={24} />
+          <Image
+            className={styles.audio_img}
+            src="/audio-on.svg"
+            alt="microphone"
+            width={24}
+            height={24}
+          />
         </button>
       )}
     </div>
