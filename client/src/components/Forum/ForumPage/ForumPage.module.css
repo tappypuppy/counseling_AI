@@ -18,3 +18,12 @@
     flex-direction: column;
     row-gap: 5px;
 }
+.container {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.name {
+    font-weight: 500;
+}

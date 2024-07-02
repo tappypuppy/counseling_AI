@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const db = new DB();
-  const { data, error } = await db.supabaseClient.from("posts").select('*');
+  const { data, error } = await db.supabaseClient.from("posts").select('*, profiles(name, image_url)');
 
   if (error) {
     console.error(error);
