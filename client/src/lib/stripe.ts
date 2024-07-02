@@ -4,7 +4,8 @@
 
 import "server-only";
 import Stripe from "stripe";
-import { supabase } from "@/lib/supabaseClient";
+// import { supabase } from "@/lib/supabaseClient";
+import DB from "@/class/DB";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   // https://github.com/stripe/stripe-node#configuration
@@ -38,8 +39,10 @@ export async function createStripeCustomer(userId: string, userName:string, user
 
   console.log("CUSTOMER: ", customer);
 
+  const db = new DB();
+
   // Supabase に保存
-  await supabase
+  await db.supabaseClient
     .from("next_auth.users")
     .update({ stripe_customer_id: customer.id })
     .eq("id", userId);
