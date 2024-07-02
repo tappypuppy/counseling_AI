@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { put } from "@vercel/blob";
 
 export default class AI {
-  public openai: OpenAI;
+  private openai: OpenAI;
 
   constructor() {
     this.openai = new OpenAI({

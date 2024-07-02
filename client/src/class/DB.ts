@@ -10,7 +10,7 @@ interface AuthDatabase {
 
 export default class DB {
   public supabaseClient: SupabaseClient;
-  public supabaseAuthClient: SupabaseClient<AuthDatabase, "next_auth">;
+  private supabaseAuthClient: SupabaseClient<AuthDatabase, "next_auth">;
 
   constructor() {
     const supabaseUrl = process.env.SUPABASE_URL!;
@@ -62,19 +62,20 @@ export default class DB {
     return data;
   }
 
-  async createRoom(userEmail: string): Promise<string | null> {
+  async createRoom(userEmail: string): Promise<string> {
     const userId = await this.getUserId(userEmail);
   
     const { data, error } = await this.supabaseClient
       .from("rooms")
       .insert([{ user_id: userId }])
-      .select();
+      .select()
+      .single();
   
     if (error) {
       throw new Error(error.message);
     }
-  
-    const roomId = data && data[0] ? (data[0] as { id: string }).id : null;
+
+    const roomId = data.id
   
     return roomId;
   }
