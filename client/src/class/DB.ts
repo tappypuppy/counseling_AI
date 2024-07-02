@@ -61,4 +61,23 @@ export default class DB {
 
     return data;
   }
+
+  async createRoom(userEmail: string): Promise<string | null> {
+    const userId = await this.getUserId(userEmail);
+  
+    const { data, error } = await this.supabaseClient
+      .from("rooms")
+      .insert([{ user_id: userId }])
+      .select();
+  
+    if (error) {
+      throw new Error(error.message);
+    }
+  
+    const roomId = data && data[0] ? (data[0] as { id: string }).id : null;
+  
+    return roomId;
+  }
+
+
 }

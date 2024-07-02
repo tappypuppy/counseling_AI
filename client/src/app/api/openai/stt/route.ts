@@ -1,32 +1,30 @@
-import { speechToText } from "./speech_to_text";
+import { loggerInfo, loggerError } from "@/lib/pino";
+import AI from "@/class/AI";
 
 export async function POST(req: Request) {
-  console.log("POST /api/openai/stt");
+  loggerInfo("api::api/openai/stt", { caller: "POST", status: 200 });
 
   const formData = await req.formData();
-  console.log("formData:", formData);
   const audioBlob = formData.get("audio");
-  console.log("audioBlob:", audioBlob);
-  
 
   if (audioBlob) {
     const blob = new Blob([audioBlob]);
-    const output_text = await speechToText(blob);
-    console.log("Speech-to-Text response:", output_text);
+    const ai = new AI();
+    const output_text = await ai.speechToText(blob);
 
     return new Response(JSON.stringify({ output: output_text }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } else {
-    console.error("audioBlob is null");
-    // Handle the error or return early
-
+  }
+  else {
+    loggerError("audioBlob is null", { caller: "POST", status: 400 });
     return new Response(
       JSON.stringify({ error: "audioBlob is null" }),
       { status: 400 }
     );
   }
+
 
 
 }

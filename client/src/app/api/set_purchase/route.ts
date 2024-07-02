@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { Stripe } from "stripe";
-import { supabase } from "@/lib/supabaseClient";
+import DB from "@/class/DB";
 
 export async function POST(req: NextRequest) {
   const { data, userId }: { data: Stripe.Checkout.Session; userId: string } =
     await req.json();
+
+  const db = new DB();
 
   const customer_id = data.customer?.toString();
   const product_id = data.line_items?.data[0].price?.product?.toString();
@@ -17,7 +20,7 @@ export async function POST(req: NextRequest) {
   const created_at = new Date(created * 1000);
   const expired_at = new Date(created_at.getTime() + 24 * 60 * 60 * 1000);
 
-  const { error } = await supabase.from("purchases").insert({
+  const { error } = await db.supabaseClient.from("purchases").insert({
     customer_id: customer_id,
     user_id: userId,
     product_id: product_id,

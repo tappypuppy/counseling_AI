@@ -1,8 +1,9 @@
 // src/app/api/open-ai/dall-e-v3/route.ts
-import { textToSpeech } from "./text_to_speech";
+import { loggerInfo } from "@/lib/pino";
+import AI from "@/class/AI";
 
 export async function POST(req: Request) {
-  console.log("POST /api/openai/tts");
+  loggerInfo("api::api/openai/tts", { caller: "POST", status: 200 });
   const { textPrompt } = await req.json();
 
   if (typeof textPrompt !== "string") {
@@ -12,6 +13,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const srcUrl = await textToSpeech(textPrompt);
+  const ai = new AI();
+  const srcUrl = await ai.textToSpeech(textPrompt);
+
   return new Response(JSON.stringify({ srcUrl }), { status: 200 });
 }

@@ -3,9 +3,7 @@
 */
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
 import { loggerInfo } from "@/lib/pino";
-import { get_user_id } from "@/app/api/function";
 import DB from "@/class/DB";
 
 export async function GET(

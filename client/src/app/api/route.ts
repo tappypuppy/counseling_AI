@@ -1,8 +1,8 @@
 // app/api/response/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { sendPromptToGpt } from "./service";
 import { loggerInfo } from "@/lib/pino";
+import AI from "@/class/AI";
 
 export async function POST(request: NextRequest) {
   loggerInfo("Request received", { caller: "POST" , status: 200});
@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
   loggerInfo("roomId: " + roomId, { caller: "POST" , status: 200});
   loggerInfo("message: " + message, { caller: "POST" , status: 200});
 
-  const gptResponseMessage = await sendPromptToGpt(
+  const ai = new AI();
+
+  const gptResponseMessage = await ai.sendPromptToGpt(
     userEmail,
     roomId,
     message,

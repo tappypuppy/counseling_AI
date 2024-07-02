@@ -3,17 +3,21 @@
 // todo: 変数名修正
 
 import { NextRequest, NextResponse } from "next/server";
-import { create_room } from "./service";
+import DB from "@/class/DB";
 
 export async function POST(request: NextRequest) {
-  console.log("Request received: create_room");
   const { userEmail } = await request.json();
 
-  const room_id = await create_room(userEmail);
+  const db = new DB();
+  const roomId = await db.createRoom(userEmail);
 
-  console.log("ROOM_ID:", room_id)
+  if (!roomId) {
+    console.error("ERROR");
+    return NextResponse.json({ status: "error" });
+  }
+
   const response = NextResponse.json({
-    data: { room_id: room_id },
+    data: { room_id: roomId },
   });
 
   return response;

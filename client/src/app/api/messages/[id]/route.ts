@@ -7,24 +7,22 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { loggerInfo } from "@/lib/pino";
-import { supabase } from "@/lib/supabaseClient";
-import { get_user_id } from "@/app/api/function";
+import DB from "@/class/DB";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: number } }
 ) {
+  loggerInfo("api::api/messages/[id]", { caller: "GET", status: 200 });
 
-  loggerInfo("Request received", { caller: "GET", status: 200 });
+  const db = new DB();
 
-  const { data, error } = await supabase
+  const { data, error } = await db.supabaseClient
     .from("messages")
     .select("message, sender")
     .eq("room_id", params.id);
 
   const response = NextResponse.json({ messages: data});
-
-  console.log("Response received: get_messages", response);
 
   return response;
 }
