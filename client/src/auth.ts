@@ -7,6 +7,8 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import { SupabaseAdapter } from "@auth/supabase-adapter";
 import google from "next-auth/providers/google";
 
+import DB from "@/class/DB";
+
 // console.log(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 export const config: NextAuthConfig = {
@@ -22,10 +24,30 @@ export const config: NextAuthConfig = {
   }),
   basePath: "/api/auth",
   callbacks: {
-    authorized({ request, auth }) {
+    async signIn({ user, account, profile }) {
+      const db = new DB();
+      const { id, name, email, image } = user;
+
+      const { error } = await db.supabaseClient
+        .from("profiles")
+        .insert([{ id: id, name: name, email: email, image_url: image }]);
+
+      console.log("signIn", user, account, profile);
+      return true;
+    },
+
+    async authorized({ request, auth }) {
+      const name = auth?.user?.name;
+
+      console.log("authorized", name, request.nextUrl.pathname);
       try {
         const { pathname } = request.nextUrl;
-        if (pathname === "/newchat" || pathname === "/payment" || pathname === "/forum") return !!auth;
+        if (
+          pathname === "/newchat" ||
+          pathname === "/payment" ||
+          pathname === "/forum"
+        )
+          return !!auth;
         return true;
       } catch (error) {
         console.log(error);
