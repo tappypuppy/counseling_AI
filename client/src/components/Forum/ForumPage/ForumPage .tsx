@@ -41,7 +41,6 @@ function ForumPage() {
       </SessionProvider>
       <div className={styles.posts}>
         {posts
-          // .sort((a: { id: number }, b: { id: number }) => b.id - a.id) // Sort posts by id in descending order
           .map((post: { id: number; userName: string, imageUrl: string, contents: string}) => (
             <div key={post.id} className={styles.post}>
               <div className={styles.container}>
