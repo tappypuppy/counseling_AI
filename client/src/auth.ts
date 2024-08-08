@@ -24,17 +24,17 @@ export const config: NextAuthConfig = {
   }),
   basePath: "/api/auth",
   callbacks: {
-    async signIn({ user, account, profile }) {
-      const db = new DB();
-      const { id, name, email, image } = user;
+    // async signIn({ user, account, profile }) {
+    //   const db = new DB();
+    //   const { id, name, email, image } = user;
 
-      const { error } = await db.supabaseClient
-        .from("profiles")
-        .insert([{ id: id, name: name, email: email, image_url: image }]);
+    //   const { error } = await db.supabaseClient
+    //     .from("profiles")
+    //     .insert([{ id: id, name: name, email: email, image_url: image }]);
 
-      console.log("signIn", user, account, profile);
-      return true;
-    },
+    //   console.log("signIn", user, account, profile);
+    //   return true;
+    // },
 
     async authorized({ request, auth }) {
       const name = auth?.user?.name;
